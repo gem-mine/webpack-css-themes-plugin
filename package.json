@@ -1,0 +1,26 @@
+{
+  "name": "webpack-css-themes-plugin",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.sdp.nd/gem-mine/webpack-css-themes-plugin.git"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "css",
+    "theme"
+  ],
+  "author": "githoniel",
+  "license": "ISC",
+  "devDependencies": {
+    "@gem-mine/eslint-config-recommend": "^3.0.0",
+    "babel-eslint": "8.2.6",
+    "eslint": "^7.1.0"
+  }
+}
