@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validate options should throw an error on the "empty theme" option with "{"themes":[]}" value 1`] = `
+"Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
+ - configuration.themes should be an non-empty array."
+`;
+
+exports[`validate options should throw an error on the "error minify type" option with "{"themes":[{"name":"xxx","fileName":"testPath"}],"minify":"xx"}" value 1`] = `
+"Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
+ - configuration.minify should be a boolean."
+`;
+
+exports[`validate options should throw an error on the "no theme" option with "{}" value 1`] = `
+"Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
+ - configuration misses the property 'themes'. Should be:
+   [object { name?, fileName? }, ...] (should not have fewer than 1 item)"
+`;
