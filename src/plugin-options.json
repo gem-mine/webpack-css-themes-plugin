@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["themes"],
+  "properties": {
+    "themes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "filePath": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "minify": {
+      "type": "boolean"
+    },
+    "isCSSModules": {
+      "type": "boolean"
+    }
+  }
+}
