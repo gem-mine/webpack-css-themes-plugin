@@ -63,3 +63,7 @@ module.exports = {
   - [ ] 支持sass-loader
   - [ ] 支持项目less
   - [ ] 支持项目sass 
+
+# Known Issue
+
+如果项目配置了多个`less-loader`，当前会GG
