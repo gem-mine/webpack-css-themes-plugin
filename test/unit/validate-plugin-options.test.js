@@ -13,6 +13,16 @@ describe('validate options', () => {
       isCSSModules: true
     },
   }, {
+    key: 'error pre-processor',
+    type: 'success',
+    value: {
+      themes: [{
+        name: 'xxx',
+        filePath: 'testPath'
+      }],
+      'pre-processor': 'sass'
+    }
+  }, {
     key: 'no boolean',
     type: 'success',
     value: {
@@ -40,6 +50,16 @@ describe('validate options', () => {
         filePath: 'testPath'
       }],
       minify: 'xx',
+    }
+  }, {
+    key: 'error pre-processor',
+    type: 'failure',
+    value: {
+      themes: [{
+        name: 'xxx',
+        filePath: 'testPath'
+      }],
+      'pre-processor': 'lessx'
     }
   }]
 
