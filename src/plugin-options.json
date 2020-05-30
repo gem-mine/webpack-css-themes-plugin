@@ -21,6 +21,10 @@
         }
       }
     },
+    "pre-processor": {
+      "type": "string",
+      "enum": ["less", "sass"]
+    },
     "minify": {
       "type": "boolean"
     },
