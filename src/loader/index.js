@@ -45,15 +45,25 @@ async function appendDataForPreProcesser(request, loaders, options, callback) {
   if (loader) {
     loader.options = loader.options || {}
     const themePath = options.themes[0].filePath
-    const variableStr = await extractLessVariable(themePath)
-    Object.assign(loader.options, {
-      appendData(loaderApi) {
-        loaderApi.addDependency(themePath)
-        console.log(variableStr)
-        return '@primary-color: #12890f;'
-      }
-    })
-    callback(null, request)
+    try {
+      const {
+        variableStr,
+        dependencies
+      } = await extractLessVariable(themePath)
+      Object.assign(loader.options, {
+        appendData(loaderApi) {
+          loaderApi.addDependency(themePath)
+          dependencies.forEach((dependencyFile) => {
+            loaderApi.addDependency(dependencyFile)
+          })
+          return variableStr
+        }
+      })
+      callback(null, request)
+    } catch (e) {
+      callback(new Error(`Webpack-css-themes-plugin merge loader options for ${
+        loaderName} faild: ${e.message}`))
+    }
   } else {
     callback(new Error(`Webpack-css-themes-plugin merge loader options for ${
       loaderName} faild: no loader found`))

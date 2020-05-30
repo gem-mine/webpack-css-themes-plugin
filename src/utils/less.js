@@ -14,7 +14,7 @@ async function extractLessVariable(sourceFilePath, parserOptions) {
       ],
     }, parserOptions), (err, root, imports, options) => {
       if (err) {
-        reject(err)
+        return reject(err)
       }
       const lessvars = {}
       let hasNoneVariable = false
@@ -34,12 +34,14 @@ async function extractLessVariable(sourceFilePath, parserOptions) {
         console.warn(`Webpack-css-themes-plugin themeFile ${
           sourceFilePath} has not-variable content which would be ignore`)
       }
-      resolve(
-        Object.keys(lessvars)
+      resolve({
+        variableStr: Object.keys(lessvars)
           .map((key) => `@${key}: ${lessvars[key]}`)
           .join(';\r\n')
-          .concat(';\r\n')
-      )
+          .concat(';\r\n'),
+        dependencies: Object.keys(imports.contents)
+          .filter((r) => r !== 'input')
+      })
     })
   })
 }

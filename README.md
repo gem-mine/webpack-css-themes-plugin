@@ -62,8 +62,11 @@ module.exports = {
   - [ ] 支持less-loader
   - [ ] 支持sass-loader
   - [ ] 支持项目less
-  - [ ] 支持项目sass 
+  - [ ] 支持项目sass
+  - [ ] 支持postcss
+  - [ ] 支持css module
 
 # Known Issue
 
-如果项目配置了多个`less-loader`，当前会GG
+- 如果项目配置了多个`less-loader`，当前会无效
+- 目前theme入口如果依赖了其他less文件，没有watch
