@@ -138,7 +138,7 @@ sup {
   top: -0.5em;
 }
 a {
-  color: #1890ff;
+  color: #12890f;
   text-decoration: none;
   background-color: transparent;
   outline: none;
@@ -147,10 +147,10 @@ a {
   -webkit-text-decoration-skip: objects;
 }
 a:hover {
-  color: #40a9ff;
+  color: #2e9629;
 }
 a:active {
-  color: #096dd9;
+  color: #066308;
 }
 a:active,
 a:hover {
@@ -309,7 +309,7 @@ mark {
 }
 ::selection {
   color: #fff;
-  background: #1890ff;
+  background: #12890f;
 }
 .clearfix {
   zoom: 1;
@@ -624,7 +624,7 @@ mark {
   position: relative;
 }
 html {
-  --antd-wave-shadow-color: #1890ff;
+  --antd-wave-shadow-color: #12890f;
 }
 [fish-click-animating-without-extra-node='true']::after,
 .fish-click-animating-node {
@@ -635,7 +635,7 @@ html {
   left: 0;
   display: block;
   border-radius: inherit;
-  box-shadow: 0 0 0 0 #1890ff;
+  box-shadow: 0 0 0 0 #12890f;
   box-shadow: 0 0 0 0 var(--antd-wave-shadow-color);
   opacity: 0.2;
   animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1), waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
@@ -645,7 +645,7 @@ html {
 }
 @keyframes waveEffect {
   100% {
-    box-shadow: 0 0 0 #1890ff;
+    box-shadow: 0 0 0 #12890f;
     box-shadow: 0 0 0 6px var(--antd-wave-shadow-color);
   }
 }
@@ -1319,9 +1319,9 @@ html {
 }
 .fish-btn:hover,
 .fish-btn:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: #fff;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn:hover > a:only-child,
 .fish-btn:focus > a:only-child {
@@ -1339,9 +1339,9 @@ html {
 }
 .fish-btn:active,
 .fish-btn.active {
-  color: #096dd9;
+  color: #066308;
   background-color: #fff;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn:active > a:only-child,
 .fish-btn.active > a:only-child {
@@ -1433,8 +1433,8 @@ html {
 }
 .fish-btn-primary {
   color: #fff;
-  background-color: #1890ff;
-  border-color: #1890ff;
+  background-color: #12890f;
+  border-color: #12890f;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
 }
@@ -1453,8 +1453,8 @@ html {
 .fish-btn-primary:hover,
 .fish-btn-primary:focus {
   color: #fff;
-  background-color: #40a9ff;
-  border-color: #40a9ff;
+  background-color: #2e9629;
+  border-color: #2e9629;
 }
 .fish-btn-primary:hover > a:only-child,
 .fish-btn-primary:focus > a:only-child {
@@ -1473,8 +1473,8 @@ html {
 .fish-btn-primary:active,
 .fish-btn-primary.active {
   color: #fff;
-  background-color: #096dd9;
-  border-color: #096dd9;
+  background-color: #066308;
+  border-color: #066308;
 }
 .fish-btn-primary:active > a:only-child,
 .fish-btn-primary.active > a:only-child {
@@ -1552,21 +1552,21 @@ html {
   content: '';
 }
 .fish-btn-group .fish-btn-primary:not(:first-child):not(:last-child) {
-  border-right-color: #40a9ff;
-  border-left-color: #40a9ff;
+  border-right-color: #2e9629;
+  border-left-color: #2e9629;
 }
 .fish-btn-group .fish-btn-primary:not(:first-child):not(:last-child):disabled {
   border-color: #d9d9d9;
 }
 .fish-btn-group .fish-btn-primary:first-child:not(:last-child) {
-  border-right-color: #40a9ff;
+  border-right-color: #2e9629;
 }
 .fish-btn-group .fish-btn-primary:first-child:not(:last-child)[disabled] {
   border-right-color: #d9d9d9;
 }
 .fish-btn-group .fish-btn-primary:last-child:not(:first-child),
 .fish-btn-group .fish-btn-primary + .fish-btn-primary {
-  border-left-color: #40a9ff;
+  border-left-color: #2e9629;
 }
 .fish-btn-group .fish-btn-primary:last-child:not(:first-child)[disabled],
 .fish-btn-group .fish-btn-primary + .fish-btn-primary[disabled] {
@@ -1591,9 +1591,9 @@ html {
 }
 .fish-btn-ghost:hover,
 .fish-btn-ghost:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: transparent;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn-ghost:hover > a:only-child,
 .fish-btn-ghost:focus > a:only-child {
@@ -1611,9 +1611,9 @@ html {
 }
 .fish-btn-ghost:active,
 .fish-btn-ghost.active {
-  color: #096dd9;
+  color: #066308;
   background-color: transparent;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn-ghost:active > a:only-child,
 .fish-btn-ghost.active > a:only-child {
@@ -1710,9 +1710,9 @@ html {
 }
 .fish-btn-dashed:hover,
 .fish-btn-dashed:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: #fff;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn-dashed:hover > a:only-child,
 .fish-btn-dashed:focus > a:only-child {
@@ -1730,9 +1730,9 @@ html {
 }
 .fish-btn-dashed:active,
 .fish-btn-dashed.active {
-  color: #096dd9;
+  color: #066308;
   background-color: #fff;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn-dashed:active > a:only-child,
 .fish-btn-dashed.active > a:only-child {
@@ -1834,9 +1834,9 @@ html {
 }
 .fish-btn-font:hover,
 .fish-btn-font:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: #fff;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn-font:hover > a:only-child,
 .fish-btn-font:focus > a:only-child {
@@ -1854,9 +1854,9 @@ html {
 }
 .fish-btn-font:active,
 .fish-btn-font.active {
-  color: #096dd9;
+  color: #066308;
   background-color: #fff;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn-font:active > a:only-child,
 .fish-btn-font.active > a:only-child {
@@ -2060,7 +2060,7 @@ html {
   content: '';
 }
 .fish-btn-link {
-  color: #1890ff;
+  color: #12890f;
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
@@ -2079,9 +2079,9 @@ html {
 }
 .fish-btn-link:hover,
 .fish-btn-link:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: transparent;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn-link:hover > a:only-child,
 .fish-btn-link:focus > a:only-child {
@@ -2099,9 +2099,9 @@ html {
 }
 .fish-btn-link:active,
 .fish-btn-link.active {
-  color: #096dd9;
+  color: #066308;
   background-color: transparent;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn-link:active > a:only-child,
 .fish-btn-link.active > a:only-child {
@@ -2486,9 +2486,9 @@ html {
   border-color: #fff;
 }
 .fish-btn-background-ghost.fish-btn-primary {
-  color: #1890ff;
+  color: #12890f;
   background-color: transparent;
-  border-color: #1890ff;
+  border-color: #12890f;
   text-shadow: none;
 }
 .fish-btn-background-ghost.fish-btn-primary > a:only-child {
@@ -2505,9 +2505,9 @@ html {
 }
 .fish-btn-background-ghost.fish-btn-primary:hover,
 .fish-btn-background-ghost.fish-btn-primary:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: transparent;
-  border-color: #40a9ff;
+  border-color: #2e9629;
 }
 .fish-btn-background-ghost.fish-btn-primary:hover > a:only-child,
 .fish-btn-background-ghost.fish-btn-primary:focus > a:only-child {
@@ -2525,9 +2525,9 @@ html {
 }
 .fish-btn-background-ghost.fish-btn-primary:active,
 .fish-btn-background-ghost.fish-btn-primary.active {
-  color: #096dd9;
+  color: #066308;
   background-color: transparent;
-  border-color: #096dd9;
+  border-color: #066308;
 }
 .fish-btn-background-ghost.fish-btn-primary:active > a:only-child,
 .fish-btn-background-ghost.fish-btn-primary.active > a:only-child {
@@ -2724,7 +2724,7 @@ html {
   content: '';
 }
 .fish-btn-background-ghost.fish-btn-link {
-  color: #1890ff;
+  color: #12890f;
   background-color: transparent;
   border-color: transparent;
   text-shadow: none;
@@ -2744,7 +2744,7 @@ html {
 }
 .fish-btn-background-ghost.fish-btn-link:hover,
 .fish-btn-background-ghost.fish-btn-link:focus {
-  color: #40a9ff;
+  color: #2e9629;
   background-color: transparent;
   border-color: transparent;
 }
@@ -2764,7 +2764,7 @@ html {
 }
 .fish-btn-background-ghost.fish-btn-link:active,
 .fish-btn-background-ghost.fish-btn-link.active {
-  color: #096dd9;
+  color: #066308;
   background-color: transparent;
   border-color: transparent;
 }
@@ -2902,7 +2902,7 @@ a.fish-btn-sm {
 .fish-checkbox-wrapper:hover .fish-checkbox-inner,
 .fish-checkbox:hover .fish-checkbox-inner,
 .fish-checkbox-input:focus + .fish-checkbox-inner {
-  border-color: #1890ff;
+  border-color: #12890f;
 }
 .fish-checkbox-checked::after {
   position: absolute;
@@ -2910,7 +2910,7 @@ a.fish-btn-sm {
   left: 0;
   width: 100%;
   height: 100%;
-  border: 1px solid #1890ff;
+  border: 1px solid #12890f;
   border-radius: 2px;
   visibility: hidden;
   animation: antCheckboxEffect 0.36s ease-in-out;
@@ -2973,11 +2973,11 @@ a.fish-btn-sm {
   content: ' ';
 }
 .fish-checkbox-checked + span {
-  color: #1890ff;
+  color: #12890f;
 }
 .fish-checkbox-checked .fish-checkbox-inner {
-  background-color: #1890ff;
-  border-color: #1890ff;
+  background-color: #12890f;
+  border-color: #12890f;
 }
 .fish-checkbox-disabled {
   cursor: not-allowed;
@@ -3027,7 +3027,7 @@ a.fish-btn-sm {
   margin-left: 8px;
 }
 .fish-checkbox-wrapper:hover .fish-checkbox + span {
-  color: #1890ff;
+  color: #12890f;
 }
 .fish-checkbox-wrapper:hover .fish-checkbox-disabled + span {
   color: rgba(0, 0, 0, 0.25);
@@ -3070,7 +3070,7 @@ a.fish-btn-sm {
   left: 50%;
   width: 8px;
   height: 8px;
-  background-color: #1890ff;
+  background-color: #12890f;
   border: 0;
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -3089,12 +3089,5 @@ a.fish-btn-sm {
   .fish-checkbox:hover::after {
     visibility: visible;
   }
-}
-
-body {
-  margin-top: 100px;
-}
-body {
-  background-color: #782832;
 }
 

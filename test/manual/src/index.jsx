@@ -3,7 +3,6 @@ import { render } from 'react-dom'
 // eslint-disable-next-line import/no-unresolved
 import { Button } from 'fish'
 import Demo from './demo'
-import './extra.less'
 
 function App() {
   return (

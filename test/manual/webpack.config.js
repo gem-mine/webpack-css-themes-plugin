@@ -1,8 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
-
-const WebpackCSSThemesPlugin = require('../../src')
+const fs = require('fs')
+const WebpackCSSThemesPlugin = require('../../src/plugin')
 
 module.exports = {
   mode: 'development',
@@ -27,11 +27,19 @@ module.exports = {
             loader: 'less-loader',
             options: {
               lessOptions: {
-                // javascriptEnabled: true
-              }
+                javascriptEnabled: true
+              },
+              // appendData: (loader) => {
+              //   const themePath = path.resolve(__dirname, 'src/extra.less')
+              //   loader.addDependency(
+              //     path.resolve(__dirname, 'src/extra.less')
+              //   )
+              //   return fs.readFileSync(
+              //     themePath
+              //   ).toString()
+              // }
             },
-          },
-          WebpackCSSThemesPlugin.loader
+          }
         ],
       },
       {
@@ -72,8 +80,8 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new WebpackCSSThemesPlugin({
       themes: [{
-        name: 'xxx',
-        filePath: 'testPath'
+        name: 'extra',
+        filePath: path.resolve(__dirname, 'src/theme/index.less')
       }],
       minify: false,
       isCSSModules: true
