@@ -5731,6 +5731,11 @@ mute-stream@0.0.8:
   resolved "https://registry.npm.taobao.org/mute-stream/download/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha1-FjDEKyJR/4HiooPelqVJfqkuXg0=
 
+mutex-lock@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.sdp.nd/mutex-lock/download/mutex-lock-2.0.0.tgz#bae48b8f9280d4178bec70e47d2887e3c4f2e9f1"
+  integrity sha1-uuSLj5KA1BeL7HDkfSiH48Ty6fE=
+
 nan@^2.12.1:
   version "2.14.1"
   resolved "https://registry.npm.taobao.org/nan/download/nan-2.14.1.tgz?cache=0&sync_timestamp=1587497111086&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnan%2Fdownload%2Fnan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"

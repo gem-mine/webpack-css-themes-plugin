@@ -7,11 +7,20 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "mannual",
+      "name": "manual",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}\\test\\manual\\build.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "less",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}\\test\\manual\\less.js"
     }
   ]
 }

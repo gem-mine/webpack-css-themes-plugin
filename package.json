@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:manual": "node test/mannual/build.js"
+    "test:manual": "node test/manual/build.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "fs-extra": "^9.0.0",
     "html-webpack-plugin": "^4.3.0",
     "jest": "^26.0.1",
+    "less": "^3.11.1",
     "less-loader": "^6.1.0",
     "mini-css-extract-plugin": "^0.9.0",
     "react": "^16.12.0",
@@ -42,6 +43,11 @@
   },
   "dependencies": {
     "loader-utils": "^2.0.0",
+    "lodash": "^4.17.15",
+    "mutex-lock": "^2.0.0",
     "schema-utils": "^2.6.6"
+  },
+  "optionalDependencies": {
+    "less": "^3.11.1"
   }
 }
