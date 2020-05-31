@@ -5,7 +5,7 @@ const webpack = require('webpack')
 
 describe('TestCases', () => {
   const casesDirectoryBase = path.resolve(__dirname, 'cases')
-  const outputDirectoryBase = path.resolve(__dirname, 'js')
+  const outputDirectoryBase = path.resolve(__dirname, 'tmp')
 
   const casesDirectory = globby.sync('*/*', {
     cwd: casesDirectoryBase,
