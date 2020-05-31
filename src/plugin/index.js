@@ -16,7 +16,7 @@ class WebpackCSSThmemePlugin {
   }
 
   apply(compiler) {
-    // const { options } = this
+    const { options } = this
     compiler.hooks.beforeRun.tap('webpack-css-thmeme-plugin-preprocess-appendData', () => {
       const { rules } = compiler.options.module
       rules.push({
@@ -24,13 +24,11 @@ class WebpackCSSThmemePlugin {
         enforce: 'pre',
         use: {
           loader: require.resolve('../loader/index.js'),
-          options: _.cloneDeep(this.options)
+          options: _.cloneDeep(options)
         }
       })
     })
   }
 }
-
-WebpackCSSThmemePlugin.loader = require.resolve('../loader/index.js')
 
 module.exports = WebpackCSSThmemePlugin
