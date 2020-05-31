@@ -25,11 +25,11 @@
     "@babel/preset-react": "^7.7.4",
     "@gem-mine/eslint-config-recommend": "^3.0.0",
     "@sdp.nd/fish": "^3.6.2",
-    "babel-eslint": "8.2.6",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-import": "^1.13.0",
     "css-loader": "^3.2.0",
-    "eslint": "^7.1.0",
+    "eslint": "^6.8.0",
     "fs-extra": "^9.0.0",
     "html-webpack-plugin": "^4.3.0",
     "jest": "^26.0.1",
@@ -42,6 +42,7 @@
     "webpack": "^4.43.0"
   },
   "dependencies": {
+    "globby": "^11.0.0",
     "loader-utils": "^2.0.0",
     "lodash": "^4.17.15",
     "mutex-lock": "^2.0.0",
