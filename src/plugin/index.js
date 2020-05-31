@@ -1,6 +1,6 @@
+const _ = require('lodash')
 const validateOptions = require('schema-utils')
 
-const dataBus = require('../dataBus')
 const schema = require('../plugin-options.json')
 
 const defaultOptions = {
@@ -13,7 +13,6 @@ class WebpackCSSThmemePlugin {
   constructor(options) {
     validateOptions(schema, options, 'Webpack CSS Thmeme Plugin')
     this.options = Object.assign(defaultOptions, options)
-    dataBus.pluginOptions = this.options
   }
 
   apply(compiler) {
@@ -23,10 +22,15 @@ class WebpackCSSThmemePlugin {
       rules.push({
         test: /\.less$/i,
         enforce: 'pre',
-        use: require.resolve('../loader/index.js')
+        use: {
+          loader: require.resolve('../loader/index.js'),
+          options: _.cloneDeep(this.options)
+        }
       })
     })
   }
 }
+
+WebpackCSSThmemePlugin.loader = require.resolve('../loader/index.js')
 
 module.exports = WebpackCSSThmemePlugin

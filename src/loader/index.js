@@ -1,17 +1,22 @@
 const MutexLock = require('mutex-lock')
+const loaderUtils = require('loader-utils')
 
-const dataBus = require('../dataBus')
 const { findLoaderByLoaderName } = require('../utils/webpack')
 const { extractLessVariable } = require('../utils/less')
 
-let loaderOptionsMerged = false
-const appendDatalock = new MutexLock()
 
 module.exports = async function themeLoader(request) {
   const callback = this.async()
-  const { pluginOptions } = dataBus
-  if (pluginOptions.themes.length === 1) {
-    if (loaderOptionsMerged) {
+  const options = loaderUtils.getOptions(this)
+
+  options.dataBus = options.dataBus || {}
+  const { dataBus } = options
+
+  dataBus.appendDatalock = dataBus.appendDatalock || new MutexLock()
+  const { appendDatalock } = dataBus
+
+  if (options.themes.length === 1) {
+    if (dataBus.loaderOptionsMerged) {
       return callback(null, request)
     } else {
       // 由于多个文件loader会并行，
@@ -19,9 +24,9 @@ module.exports = async function themeLoader(request) {
       // so 先lock
       await appendDatalock.request()
       // 对于非首个loader此处应该得到`loaderOptionsMerged` = true
-      if (!loaderOptionsMerged) {
-        await appendDataForPreProcesser(request, this.loaders, pluginOptions, callback)
-        loaderOptionsMerged = true
+      if (!dataBus.loaderOptionsMerged) {
+        await appendDataForPreProcesser(request, this, options, callback)
+        dataBus.loaderOptionsMerged = true
         appendDatalock.release()
       } else {
         appendDatalock.release()
@@ -34,22 +39,26 @@ module.exports = async function themeLoader(request) {
   }
 }
 
-async function appendDataForPreProcesser(request, loaders, options, callback) {
+async function appendDataForPreProcesser(request, loadContext, options, callback) {
   const preProcessorName = options['pre-processor']
   // TODO 暂时只支持less
   if (preProcessorName !== 'less') {
     throw new Error('not implemented')
   }
   const loaderName = `${preProcessorName}-loader`
-  const loader = findLoaderByLoaderName(loaders, loaderName)
+  const loader = findLoaderByLoaderName(loadContext.loaders, loaderName)
   if (loader) {
     loader.options = loader.options || {}
     const themePath = options.themes[0].filePath
     try {
       const {
         variableStr,
-        dependencies
+        dependencies,
+        warnings
       } = await extractLessVariable(themePath)
+      warnings.forEach((warning) => {
+        loadContext.emitWarning(warning)
+      })
       Object.assign(loader.options, {
         appendData(loaderApi) {
           loaderApi.addDependency(themePath)
