@@ -3,39 +3,6 @@ const path = require('path')
 const globby = require('globby')
 const webpack = require('webpack')
 
-function compareDirectory(actual, expected) {
-  const files = fs.readdirSync(expected)
-
-  for (const file of files) {
-    const absoluteFilePath = path.resolve(expected, file)
-
-    const stats = fs.lstatSync(absoluteFilePath)
-
-    if (stats.isDirectory()) {
-      compareDirectory(
-        path.resolve(actual, file),
-        path.resolve(expected, file)
-      )
-    } else if (stats.isFile()) {
-      const content = fs.readFileSync(path.resolve(expected, file), 'utf8')
-      const actualContent = fs.readFileSync(path.resolve(actual, file), 'utf8')
-
-      expect(actualContent).toEqual(content)
-    }
-  }
-}
-
-function compareWarning(actual, expectedFile) {
-  if (!fs.existsSync(expectedFile)) {
-    return
-  }
-
-  // eslint-disable-next-line global-require, import/no-dynamic-require
-  const expected = require(expectedFile)
-
-  expect(actual.trim()).toBe(expected.trim())
-}
-
 describe('TestCases', () => {
   const casesDirectoryBase = path.resolve(__dirname, 'cases')
   const outputDirectoryBase = path.resolve(__dirname, 'js')
@@ -109,10 +76,7 @@ describe('TestCases', () => {
         }
 
         const expectedWarning = path.resolve(directoryForCase, 'warnings.js')
-        const actualWarning = stats.toString({
-          all: false,
-          warnings: true,
-        })
+        const actualWarning = stats.toString()
         compareWarning(actualWarning, expectedWarning)
 
         done()
@@ -120,3 +84,39 @@ describe('TestCases', () => {
     }, 10000)
   }
 })
+
+
+function compareDirectory(actual, expected) {
+  const files = fs.readdirSync(expected)
+
+  for (const file of files) {
+    const absoluteFilePath = path.resolve(expected, file)
+
+    const stats = fs.lstatSync(absoluteFilePath)
+
+    if (stats.isDirectory()) {
+      compareDirectory(
+        path.resolve(actual, file),
+        path.resolve(expected, file)
+      )
+    } else if (stats.isFile()) {
+      const content = fs.readFileSync(path.resolve(expected, file), 'utf8')
+      const actualContent = fs.readFileSync(path.resolve(actual, file), 'utf8')
+
+      expect(actualContent).toEqual(content)
+    }
+  }
+}
+
+function compareWarning(actual, expectedFile) {
+  if (!fs.existsSync(expectedFile)) {
+    return
+  }
+
+  expect(actual.includes('WARNING in')).toBe(true)
+
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  const expected = require(expectedFile)
+
+  expect(actual.includes(expected.trim())).toBe(true)
+}
