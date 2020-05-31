@@ -26,7 +26,7 @@ async function extractLessVariable(sourceFilePath, parserOptions) {
           const name = rule.name.substr(1)
           const { value } = rule
           lessvars[name] = value.toCSS()
-        } else {
+        } else if (!rule.isLineComment) {
           hasNoneVariable = true
         }
       })
