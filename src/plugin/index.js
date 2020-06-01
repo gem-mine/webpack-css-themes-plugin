@@ -1,6 +1,9 @@
+const path = require('path')
+const fs = require('fs')
 const validateOptions = require('schema-utils')
 
-const { extractLessVariable } = require('../utils/less')
+const mergeWithArray = require('../utils/mergeWithArray')
+
 const {
   findLoaderByLoaderName,
   registerCompilerHook
@@ -32,7 +35,9 @@ class WebpackCSSThmemePlugin {
           .then(({
             warnings
           }) => {
-            warningList.push(...warnings)
+            if (warnings) {
+              warningList.push(...warnings)
+            }
             callback()
           }, (e) => {
             callback(e)
@@ -63,31 +68,23 @@ class WebpackCSSThmemePlugin {
     const loaders = findLoaderByLoaderName(rules, loaderName)
     if (loaders.length > 0) {
       const themePath = options.themes[0].filePath
-      const {
-        variableStr,
-        dependencies,
-        warnings
-      } = await extractLessVariable(themePath, context)
-        .catch((e) => {
-          throw new Error(`Webpack-css-themes-plugin merge loader options for ${
-            loaderName} faild: ${e.message}`)
-        })
-
       loaders.forEach((loader) => {
         loader.options = loader.options || {}
+        loader.options = mergeWithArray(loader.options, {
+          lessOptions: {
+            paths: [
+              path.dirname(themePath)
+            ]
+          }
+        })
         Object.assign(loader.options, {
           appendData(loaderApi) {
             loaderApi.addDependency(themePath)
-            dependencies.forEach((dependencyFile) => {
-              loaderApi.addDependency(dependencyFile)
-            })
-            return variableStr
+            return fs.readFileSync(themePath)
           }
         })
       })
-      return {
-        warnings
-      }
+      return {}
     } else {
       throw new Error(`Webpack-css-themes-plugin merge loader options for ${
         loaderName} faild: no loader found`)
