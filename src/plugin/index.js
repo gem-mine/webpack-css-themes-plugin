@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const validateOptions = require('schema-utils')
 
 const { extractLessVariable } = require('../utils/less')
