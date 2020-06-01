@@ -13,75 +13,77 @@ describe('TestCases', () => {
   })
 
   for (const directory of casesDirectory) {
-    if (/^(\.|_)&/.test(directory)) {
-      return
-    }
+    if (!/^(\.|_)&/.test(directory)) {
     // eslint-disable-next-line no-loop-func
-    it(`${directory} should compile to the expected result`, (done) => {
-      const directoryForCase = path.resolve(casesDirectoryBase, directory)
-      const outputDirectoryForCase = path.resolve(outputDirectoryBase, directory)
-      // eslint-disable-next-line import/no-dynamic-require, global-require
-      const webpackConfig = require(path.resolve(
-        directoryForCase,
-        'webpack.config.js'
-      ))
+      it(`${directory} should compile to the expected result`, (done) => {
+        const directoryForCase = path.resolve(casesDirectoryBase, directory)
+        const outputDirectoryForCase = path.resolve(outputDirectoryBase, directory)
+        // eslint-disable-next-line import/no-dynamic-require, global-require
+        const webpackConfig = require(path.resolve(
+          directoryForCase,
+          'webpack.config.js'
+        ))
 
-      for (const config of [].concat(webpackConfig)) {
-        Object.assign(
-          config,
-          {
-            mode: 'none',
-            context: directoryForCase,
-            output: {
-              path: outputDirectoryForCase,
-              ...config.output
+        for (const config of [].concat(webpackConfig)) {
+          Object.assign(
+            config,
+            {
+              mode: 'none',
+              context: directoryForCase,
+              output: {
+                path: outputDirectoryForCase,
+                ...config.output
+              },
             },
-          },
-          config
-        )
-      }
-
-      webpack(webpackConfig, (err, stats) => {
-        if (err) {
-          done(err)
-          return
+            config
+          )
         }
 
-        if (stats.hasErrors()) {
-          done(
-            new Error(
-              stats.toString({
-                context: path.resolve(__dirname, '..'),
-                errorDetails: true,
-              })
+        webpack(webpackConfig, (err, stats) => {
+          if (err) {
+            done(err)
+            return
+          }
+
+          if (stats.hasErrors()) {
+            done(
+              new Error(
+                stats.toString({
+                  context: path.resolve(__dirname, '..'),
+                  errorDetails: true,
+                })
+              )
             )
+
+            return
+          }
+
+          const expectedDirectory = path.resolve(directoryForCase, 'expected')
+          const expectedDirectoryByVersion = path.join(
+            expectedDirectory,
+            `webpack-${webpack.version[0]}`
           )
 
-          return
-        }
+          if (fs.existsSync(expectedDirectoryByVersion)) {
+            compareDirectory(
+              outputDirectoryForCase,
+              expectedDirectoryByVersion
+            )
+          } else {
+            compareDirectory(outputDirectoryForCase, expectedDirectory)
+          }
 
-        const expectedDirectory = path.resolve(directoryForCase, 'expected')
-        const expectedDirectoryByVersion = path.join(
-          expectedDirectory,
-          `webpack-${webpack.version[0]}`
-        )
+          const expectedWarning = path.resolve(directoryForCase, 'warnings.js')
+          const actualWarning = stats.toString({
+            all: false,
+            warnings: true
+          })
+          compareWarning(actualWarning, expectedWarning)
 
-        if (fs.existsSync(expectedDirectoryByVersion)) {
-          compareDirectory(
-            outputDirectoryForCase,
-            expectedDirectoryByVersion
-          )
-        } else {
-          compareDirectory(outputDirectoryForCase, expectedDirectory)
-        }
-
-        const expectedWarning = path.resolve(directoryForCase, 'warnings.js')
-        const actualWarning = stats.toString()
-        compareWarning(actualWarning, expectedWarning)
-
-        done()
-      })
-    }, 10000)
+          done()
+        })
+      }, 10000)
+    }
   }
 })
 
@@ -113,10 +115,8 @@ function compareWarning(actual, expectedFile) {
     return
   }
 
-  expect(actual.includes('WARNING in')).toBe(true)
-
   // eslint-disable-next-line global-require, import/no-dynamic-require
   const expected = require(expectedFile)
 
-  expect(actual.includes(expected.trim())).toBe(true)
+  expect(actual.trim()).toBe(expected.trim())
 }
