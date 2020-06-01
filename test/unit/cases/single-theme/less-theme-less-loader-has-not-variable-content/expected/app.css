@@ -1,4 +1,7 @@
 .body {
   background-color: #12890f;
 }
+body {
+  height: 100px;
+}
 
