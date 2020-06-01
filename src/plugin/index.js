@@ -27,7 +27,7 @@ class WebpackCSSThmemePlugin {
       const warningList = []
       registerCompilerHook(compiler, 'beforeCompile', async (compilationParams, callback) => {
         const { rules } = compilationParams.normalModuleFactory.ruleSet
-        this.appendDataForPreProcesser(rules, options, callback)
+        this.appendDataForPreProcesser(rules, options)
           .then(({
             warnings
           }) => {
@@ -62,7 +62,7 @@ class WebpackCSSThmemePlugin {
     // }
   }
 
-  async appendDataForPreProcesser(rules, options, callback) {
+  async appendDataForPreProcesser(rules, options) {
     const preProcessorName = options['pre-processor']
     // TODO 暂时只支持less
     if (preProcessorName !== 'less') {

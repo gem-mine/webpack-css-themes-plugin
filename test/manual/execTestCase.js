@@ -3,13 +3,13 @@ const path = require('path')
 const globby = require('globby')
 const webpack = require('webpack')
 
-function done() {}
 
 function describe(name, fn) {
   fn()
 }
 
 function it(name, fn) {
+  function done() {}
   fn(done)
 }
 
