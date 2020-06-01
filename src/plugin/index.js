@@ -26,8 +26,9 @@ class WebpackCSSThmemePlugin {
     if (options.themes.length === 1) {
       const warningList = []
       registerCompilerHook(compiler, 'beforeCompile', async (compilationParams, callback) => {
+        const { context } = compilationParams.normalModuleFactory
         const { rules } = compilationParams.normalModuleFactory.ruleSet
-        this.appendDataForPreProcesser(rules, options)
+        this.appendDataForPreProcesser(rules, context, options)
           .then(({
             warnings
           }) => {
@@ -50,19 +51,9 @@ class WebpackCSSThmemePlugin {
       // TODO 暂时只支持单主题
       throw new Error('not implemented')
     }
-    // /**
-    //  * webpack 4+ comes with a new plugin system.
-    //  *
-    //  * Check for hooks in-order to support old plugin system
-    //  */
-    // if (compiler.hooks) {
-    //   compiler.hooks.afterEmit.tapAsync('write-file-webpack-plugin', handleAfterEmit);
-    // } else {
-    //   compiler.plugin('after-emit', handleAfterEmit);
-    // }
   }
 
-  async appendDataForPreProcesser(rules, options) {
+  async appendDataForPreProcesser(rules, context, options) {
     const preProcessorName = options['pre-processor']
     // TODO 暂时只支持less
     if (preProcessorName !== 'less') {
@@ -76,7 +67,7 @@ class WebpackCSSThmemePlugin {
         variableStr,
         dependencies,
         warnings
-      } = await extractLessVariable(themePath)
+      } = await extractLessVariable(themePath, context)
         .catch((e) => {
           throw new Error(`Webpack-css-themes-plugin merge loader options for ${
             loaderName} faild: ${e.message}`)

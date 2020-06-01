@@ -4,13 +4,15 @@ const path = require('path')
 
 const mergeWithArray = require('./mergeWithArray')
 
-async function extractLessVariable(sourceFilePath, parserOptions) {
+async function extractLessVariable(sourceFilePath, context, parserOptions) {
   return new Promise((resolve, reject) => {
     let paletteLess = fs.readFileSync(sourceFilePath, 'utf8')
-    paletteLess = paletteLess.replace(/@import \(less\) "~/, (`@import (less) "${path.join(process.cwd(), 'node_modules')}/`))
+    // @import (xxx) '~xxx' => @import (xxx) 'xxx'
+    paletteLess = paletteLess.replace(/(@import(\s*\(.+\)\s*|\s*)["'])(~)/g, '$1')
     less.parse(paletteLess, mergeWithArray({
       paths: [
-        path.dirname(sourceFilePath)
+        path.dirname(sourceFilePath),
+        path.join(context, 'node_modules')
       ],
     }, parserOptions), (err, root, imports, options) => {
       if (err) {
