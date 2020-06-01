@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "manual",
+      "name": "manual build",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -16,11 +16,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "less",
+      "name": "manual test",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}\\test\\manual\\less.js"
+      "program": "${workspaceFolder}\\test\\manual\\execTestCase.js"
     }
   ]
 }
