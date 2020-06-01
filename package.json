@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:manual": "node test/manual/build.js"
+    "test:manual": "node test/manual/build.js",
+    "lint": "eslint ./src ./test"
   },
   "repository": {
     "type": "git",
