@@ -11,17 +11,16 @@ const {
 
 const schema = require('../plugin-options.json')
 
-const defaultOptions = {
-  minify: true,
-  isCSSModules: false,
-  'pre-processor': 'less'
-}
 const PluginName = 'webpack-css-theme-plugin'
 
 class WebpackCSSThmemePlugin {
   constructor(options) {
-    validateOptions(schema, options, 'Webpack CSS Thmeme Plugin')
-    this.options = Object.assign(defaultOptions, options)
+    validateOptions(schema, options, PluginName)
+
+    this.options = {
+      'pre-processor': 'less',
+      ...options
+    }
   }
 
   apply(compiler) {
@@ -42,7 +41,6 @@ class WebpackCSSThmemePlugin {
           }, (e) => {
             callback(e)
           })
-        // rules[]
       }, {
         handlerName: `${PluginName}-set-loader-option`,
         async: true
@@ -53,8 +51,16 @@ class WebpackCSSThmemePlugin {
         }
       })
     } else {
-      // TODO 暂时只支持单主题
-      throw new Error('not implemented')
+      registerCompilerHook(compiler, 'beforeRun', () => {
+        const { rules } = compiler.options.module
+        rules.push({
+          test: /\.less$/i,
+          enforce: 'pre',
+          use: require.resolve('../loader/index.js')
+        })
+      }, {
+        handlerName: `${PluginName}-set-post-loader`,
+      })
     }
   }
 
@@ -67,7 +73,7 @@ class WebpackCSSThmemePlugin {
     const loaderName = `${preProcessorName}-loader`
     const loaders = findLoaderByLoaderName(rules, loaderName)
     if (loaders.length > 0) {
-      const themePath = options.themes[0].filePath
+      const themePath = options.themes[0].entryPath
       loaders.forEach((loader) => {
         loader.options = loader.options || {}
         loader.options = mergeWithArray(loader.options, {

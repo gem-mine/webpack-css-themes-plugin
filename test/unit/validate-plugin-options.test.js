@@ -7,10 +7,8 @@ describe('validate options', () => {
     value: {
       themes: [{
         name: 'xxx',
-        filePath: 'testPath'
-      }],
-      minify: false,
-      isCSSModules: true
+        entryPath: 'testPath'
+      }]
     },
   }, {
     key: 'error pre-processor',
@@ -18,7 +16,7 @@ describe('validate options', () => {
     value: {
       themes: [{
         name: 'xxx',
-        filePath: 'testPath'
+        entryPath: 'testPath'
       }],
       'pre-processor': 'sass'
     }
@@ -28,7 +26,7 @@ describe('validate options', () => {
     value: {
       themes: [{
         name: 'xxx',
-        filePath: 'testPath'
+        entryPath: 'testPath'
       }],
     }
   }, {
@@ -42,22 +40,12 @@ describe('validate options', () => {
       themes: []
     }
   }, {
-    key: 'error minify type',
-    type: 'failure',
-    value: {
-      themes: [{
-        name: 'xxx',
-        filePath: 'testPath'
-      }],
-      minify: 'xx',
-    }
-  }, {
     key: 'error pre-processor',
     type: 'failure',
     value: {
       themes: [{
         name: 'xxx',
-        filePath: 'testPath'
+        entryPath: 'testPath'
       }],
       'pre-processor': 'lessx'
     }

@@ -5,12 +5,7 @@ exports[`validate options should throw an error on the "empty theme" option with
  - configuration.themes should be an non-empty array."
 `;
 
-exports[`validate options should throw an error on the "error minify type" option with "{"themes":[{"name":"xxx","filePath":"testPath"}],"minify":"xx"}" value 1`] = `
-"Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
- - configuration.minify should be a boolean."
-`;
-
-exports[`validate options should throw an error on the "error pre-processor" option with "{"themes":[{"name":"xxx","filePath":"testPath"}],"pre-processor":"lessx"}" value 1`] = `
+exports[`validate options should throw an error on the "error pre-processor" option with "{"themes":[{"name":"xxx","entryPath":"testPath"}],"pre-processor":"lessx"}" value 1`] = `
 "Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
  - configuration['pre-processor'] should be one of these:
    \\"less\\" | \\"sass\\""
@@ -19,5 +14,5 @@ exports[`validate options should throw an error on the "error pre-processor" opt
 exports[`validate options should throw an error on the "no theme" option with "{}" value 1`] = `
 "Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
  - configuration misses the property 'themes'. Should be:
-   [object { name?, filePath? }, ...] (should not have fewer than 1 item)"
+   [object { name?, entryPath?, distFileName? }, ...] (should not have fewer than 1 item)"
 `;

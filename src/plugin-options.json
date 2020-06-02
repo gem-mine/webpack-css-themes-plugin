@@ -14,7 +14,11 @@
             "type": "string",
             "minLength": 1
           },
-          "filePath": {
+          "entryPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "distFileName": {
             "type": "string",
             "minLength": 1
           }
@@ -24,12 +28,6 @@
     "pre-processor": {
       "type": "string",
       "enum": ["less", "sass"]
-    },
-    "minify": {
-      "type": "boolean"
-    },
-    "isCSSModules": {
-      "type": "boolean"
     }
   }
 }
