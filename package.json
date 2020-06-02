@@ -46,7 +46,8 @@
     "globby": "^11.0.0",
     "loader-utils": "^2.0.0",
     "lodash": "^4.17.15",
-    "schema-utils": "^2.6.6"
+    "schema-utils": "^2.6.6",
+    "webpack-sources": "^1.4.3"
   },
   "optionalDependencies": {
     "less": "^3.11.1"

@@ -8,6 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "manual build",
+      "console": "integratedTerminal",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -17,6 +18,7 @@
       "type": "node",
       "request": "launch",
       "name": "manual test",
+      "console": "integratedTerminal",
       "skipFiles": [
         "<node_internals>/**"
       ],

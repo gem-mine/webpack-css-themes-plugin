@@ -16,7 +16,7 @@ const defaultOptions = {
   isCSSModules: false,
   'pre-processor': 'less'
 }
-const PluginName = 'WebpackCSSThmemePlugin'
+const PluginName = 'webpack-css-theme-plugin'
 
 class WebpackCSSThmemePlugin {
   constructor(options) {

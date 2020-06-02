@@ -1,10 +1,25 @@
 {
   "type": "object",
-  "additionalProperties": false,
-  "required": [],
+  "additionalProperties": true,
   "properties": {
     "publicPath": {
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "esModule": {
+      "type": "boolean"
+    },
+    "hmr": {
+      "type": "boolean"
+    },
+    "reloadAll": {
+      "type": "boolean"
     }
   }
 }

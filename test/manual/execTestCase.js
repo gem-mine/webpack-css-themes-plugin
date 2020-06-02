@@ -75,7 +75,7 @@ describe('TestCases', () => {
   })
 
   for (const directory of casesDirectory) {
-    if (!/^(\.|_)&/.test(directory)) {
+    if (!/^(\.|_)&/.test(directory) && directory === 'single-theme/less-theme-less-loader-theme-file-use-node_modules') {
     // eslint-disable-next-line no-loop-func
       it(`${directory} should compile to the expected result`, (done) => {
         const directoryForCase = path.resolve(casesDirectoryBase, directory)

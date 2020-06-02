@@ -1,67 +1,28 @@
+/* eslint-disable no-unused-vars */
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const fs = require('fs')
 const WebpackCSSThemesPlugin = require('../../src/plugin')
 
+const loader = require.resolve('../../src/loader/index.js')
+const Plugin2 = require('../../src/extractPlugin/index.js')
+
 module.exports = {
   mode: 'development',
   devtool: false,
   entry: {
-    app: `${__dirname}/src/index.jsx`,
-  },
-  resolve: {
-    extensions: ['.jsx', '.js'],
-    alias: {
-      fish: '@sdp.nd/fish',
-    },
+    app: `${__dirname}/src/index.js`,
   },
   module: {
     rules: [
       {
         test: /\.less$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          loader,
           'css-loader',
-          {
-            loader: 'less-loader',
-            options: {
-              lessOptions: {
-                javascriptEnabled: true
-              },
-              // appendData: (loader) => {
-              //   const themePath = path.resolve(__dirname, 'src/extra.less')
-              //   loader.addDependency(
-              //     path.resolve(__dirname, 'src/extra.less')
-              //   )
-              //   return fs.readFileSync(
-              //     themePath
-              //   ).toString()
-              // }
-            },
-          }
+          'less-loader'
         ],
-      },
-      {
-        test: /\.(svg)(\?.*)?$/,
-        use: 'url-loader',
-      },
-      {
-        test: /\.m?jsx?$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-react', '@babel/preset-env'],
-            plugins: [
-              ['import', {
-                libraryName: 'fish',
-                libraryDirectory: 'es',
-                style: true,
-              }],
-            ],
-          },
-        },
       },
     ],
   },
@@ -77,12 +38,16 @@ module.exports = {
     port: 9000,
   },
   plugins: [
-    new MiniCssExtractPlugin(),
+    new Plugin2({
+      filename: 'app1.css'
+    }),
     new WebpackCSSThemesPlugin({
-      themes: [{
-        name: 'extra',
-        filePath: path.resolve(__dirname, 'src/theme/index.less')
-      }],
+      themes: [
+        {
+          name: 'default',
+          filePath: path.resolve(__dirname, 'src/theme/index.less')
+        }
+      ],
       minify: false,
       isCSSModules: true
     }),
