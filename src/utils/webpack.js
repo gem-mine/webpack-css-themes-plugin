@@ -41,25 +41,12 @@ function registerCompilerHook(compiler, hookName, handler, {
   }
 }
 
-function hotLoader(content, context) {
-  const accept = context.locals
-    ? ''
-    : 'module.hot.accept(undefined, cssReload);'
-
-  return `${content}
-    if(module.hot) {
-      // ${Date.now()}
-      var cssReload = require(${loaderUtils.stringifyRequest(
-    context.context,
-    path.join(__dirname, 'hmr/hotModuleReplacement.js')
-  )})(module.id, ${JSON.stringify({
-  ...context.options,
-  locals: !!context.locals,
-})});
-      module.hot.dispose(cssReload);
-      ${accept}
-    }
-  `
+function recursiveIssuer(m) {
+  if (m.issuer) {
+    return recursiveIssuer(m.issuer)
+  } else {
+    return Array.from(m._chunks)[0].name
+  }
 }
 
 function evalModuleCode(loaderContext, code, filename) {
@@ -85,7 +72,7 @@ function findModuleById(modules, id) {
 module.exports = {
   findLoaderByLoaderName,
   registerCompilerHook,
-  hotLoader,
+  recursiveIssuer,
   evalModuleCode,
   findModuleById
 }

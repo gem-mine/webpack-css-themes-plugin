@@ -8,7 +8,6 @@ const CssDependency = require('../CssDependency')
 
 const { PluginName } = require('../const')
 const {
-  hotLoader,
   evalModuleCode,
   findModuleById
 } = require('../utils/webpack')
@@ -120,14 +119,10 @@ class ChildCompiler {
           return reject(new Error("Didn't get a result from child compiler"))
         }
 
-        let locals
-
         try {
           let dependencies
           let exports = evalModuleCode(this.parentContext, this.source, this.request)
-          // eslint-disable-next-line no-underscore-dangle
           exports = exports.__esModule ? exports.default : exports
-          locals = exports && exports.locals
           if (!Array.isArray(exports)) {
             dependencies = [[null, exports]]
           } else {
@@ -148,20 +143,7 @@ class ChildCompiler {
           return reject(e)
         }
 
-        const esModule = typeof options.esModule !== 'undefined' ? options.esModule : false
-        const result = locals
-          ? `\n${esModule ? 'export default' : 'module.exports ='} ${JSON.stringify(
-            locals
-          )};`
-          : ''
-
-        let resultSource = `// extracted by ${PluginName}`
-
-        resultSource += options.hmr
-          ? hotLoader(result, { context: this.parentContext.context, options, locals })
-          : result
-
-        return resolve(resultSource)
+        return resolve(`// extracted by ${PluginName}`)
       })
     })
   }

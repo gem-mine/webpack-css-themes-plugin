@@ -11,7 +11,8 @@ const multiThemeHandler = require('./multiThemeHandler')
 const mergeWithArray = require('../utils/mergeWithArray')
 const {
   findLoaderByLoaderName,
-  registerCompilerHook
+  registerCompilerHook,
+  recursiveIssuer
 } = require('../utils/webpack')
 
 const DefaultFileName = '[name].css'
@@ -60,13 +61,23 @@ class WebpackCSSThmemePlugin {
         throw new Error('not implemented')
       }
       registerCompilerHook(compiler, 'beforeRun', () => {
+        const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
         const { rules } = compiler.options.module
         rules.push({
-          test: new RegExp(`\\.(${preProcessorName}|css)$`, 'i'),
+          test: extReg,
           enforce: 'post',
           use: {
             loader: require.resolve('../loader/index.js'),
             options,
+          }
+        })
+        const { cacheGroups } = compiler.options.optimization.splitChunks
+        Object.keys(compiler.options.entry).forEach((entryName) => {
+          cacheGroups[`${entryName}`] = {
+            name: entryName,
+            test: (m, c, entry = entryName) => m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+            chunks: 'all',
+            enforce: true,
           }
         })
       }, {
