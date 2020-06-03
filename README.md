@@ -11,6 +11,11 @@
 - 支持主题文件引用其他文件，包括node_modules
 - 支持异步样式
 
+## Requirement
+
+- Webpack: ^4.4.0 | ^5.0.0
+- less-loader: "^6.0.0"
+
 ## How to Use
 
 Webpack配置参考如下
