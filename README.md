@@ -60,6 +60,8 @@ module.exports = {
 
 1. 项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
 2. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要使用他们
+3. 如果你使用了`html-webpack-plugin`, 你需要过滤掉css的注入 // TODO 自动移除
+
 
 ## Options
 
@@ -98,3 +100,6 @@ Type: `String|Function`
   - [ ] 支持sass-loader
   - [X] 支持postcss
   - [X] 支持css module
+- [] dev开发模式
+- [] 提供主题文件加载器
+- [] 更好的html-webpack-plugin处理
