@@ -41,11 +41,11 @@ function registerCompilerHook(compiler, hookName, handler, {
   }
 }
 
-function recursiveIssuer(m) {
-  if (m.issuer) {
-    return recursiveIssuer(m.issuer)
+function recursiveIssuer(module, entryName) {
+  if (module.issuer) {
+    return recursiveIssuer(module.issuer, entryName)
   } else {
-    return Array.from(m._chunks)[0].name
+    return Array.from(module._chunks)[0].name === entryName
   }
 }
 

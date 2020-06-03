@@ -75,7 +75,11 @@ class WebpackCSSThmemePlugin {
         Object.keys(compiler.options.entry).forEach((entryName) => {
           cacheGroups[`${entryName}`] = {
             name: entryName,
-            test: (m, c, entry = entryName) => m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+            // eslint-disable-next-line arrow-body-style
+            test: (m, c, entry = entryName) => {
+              console.log(m.constructor.name === 'CssModule' && recursiveIssuer(m, entry))
+              return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
+            },
             chunks: 'all',
             enforce: true,
           }
