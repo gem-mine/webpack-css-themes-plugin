@@ -9,6 +9,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
+        "required": ["entryPath"],
         "properties": {
           "name": {
             "type": "string",
@@ -21,6 +22,9 @@
           "distFileName": {
             "type": "string",
             "minLength": 1
+          },
+          "distChunkFilename": {
+            "type": "string"
           }
         }
       }
@@ -28,6 +32,16 @@
     "pre-processor": {
       "type": "string",
       "enum": ["less", "sass"]
+    },
+    "publicPath": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
     }
   }
 }
