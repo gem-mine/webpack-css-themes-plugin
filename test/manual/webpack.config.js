@@ -6,7 +6,6 @@ const fs = require('fs')
 const WebpackCSSThemesPlugin = require('../../src/plugin')
 
 const loader = require.resolve('../../src/loader/index.js')
-const Plugin2 = require('../../src/extractPlugin/index.js')
 
 module.exports = {
   mode: 'development',
@@ -19,7 +18,6 @@ module.exports = {
       {
         test: /\.less$/i,
         use: [
-          loader,
           'css-loader',
           'less-loader'
         ],
@@ -38,18 +36,20 @@ module.exports = {
     port: 9000,
   },
   plugins: [
-    new Plugin2({
-      filename: 'app1.css'
-    }),
+    // new Plugin2({
+    //   filename: 'app.css'
+    // }),
     new WebpackCSSThemesPlugin({
       themes: [
         {
           name: 'default',
-          filePath: path.resolve(__dirname, 'src/theme/index.less')
+          entryPath: path.resolve(__dirname, 'src/theme/index.less')
+        },
+        {
+          name: 'default2',
+          entryPath: path.resolve(__dirname, 'src/theme/index2.less')
         }
-      ],
-      minify: false,
-      isCSSModules: true
+      ]
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/index.html'),
