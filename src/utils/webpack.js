@@ -1,7 +1,4 @@
-const path = require('path')
 const NativeModule = require('module')
-
-const loaderUtils = require('loader-utils')
 
 function findLoaderByLoaderName(rules, loaderName) {
   const result = []

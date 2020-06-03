@@ -1,5 +1,4 @@
 const path = require('path')
-const fs = require('fs')
 
 const validateOptions = require('schema-utils')
 const _ = require('lodash')
@@ -8,9 +7,7 @@ const { PluginName } = require('../const')
 const schema = require('../plugin-options.json')
 const multiThemeHandler = require('./multiThemeHandler')
 
-const mergeWithArray = require('../utils/mergeWithArray')
 const {
-  findLoaderByLoaderName,
   registerCompilerHook,
   recursiveIssuer
 } = require('../utils/webpack')
@@ -30,70 +27,43 @@ class WebpackCSSThmemePlugin {
 
   apply(compiler) {
     const options = _.cloneDeep(this.options)
-    if (options.themes.length === 1) {
-      const warningList = []
-      registerCompilerHook(compiler, 'beforeCompile', async (compilationParams, callback) => {
-        const { rules } = compilationParams.normalModuleFactory.ruleSet
-        this.appendDataForPreProcesser(rules, options)
-          .then(({
-            warnings
-          }) => {
-            if (warnings) {
-              warningList.push(...warnings)
-            }
-            callback()
-          }, (e) => {
-            callback(e)
-          })
-      }, {
-        handlerName: `${PluginName}-set-loader-option`,
-        async: true
-      })
-      registerCompilerHook(compiler, 'thisCompilation', (compilation) => {
-        if (warningList.length) {
-          compilation.warnings.push(...warningList)
+    const preProcessorName = options['pre-processor']
+    // TODO 暂时只支持less
+    if (preProcessorName !== 'less') {
+      throw new Error('not implemented')
+    }
+    registerCompilerHook(compiler, 'beforeRun', () => {
+      const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
+      const { rules } = compiler.options.module
+      rules.push({
+        test: extReg,
+        enforce: 'post',
+        use: {
+          loader: require.resolve('../loader/index.js'),
+          options,
         }
       })
-    } else {
-      const preProcessorName = options['pre-processor']
-      // TODO 暂时只支持less
-      if (preProcessorName !== 'less') {
-        throw new Error('not implemented')
-      }
-      registerCompilerHook(compiler, 'beforeRun', () => {
-        const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
-        const { rules } = compiler.options.module
-        rules.push({
-          test: extReg,
-          enforce: 'post',
-          use: {
-            loader: require.resolve('../loader/index.js'),
-            options,
-          }
-        })
-        const { cacheGroups } = compiler.options.optimization.splitChunks
-        Object.keys(compiler.options.entry).forEach((entryName) => {
-          cacheGroups[`${entryName}`] = {
-            name: entryName,
-            // eslint-disable-next-line arrow-body-style
-            test: (m, c, entry = entryName) => {
-              console.log(m.constructor.name === 'CssModule' && recursiveIssuer(m, entry))
-              return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
-            },
-            chunks: 'all',
-            enforce: true,
-          }
-        })
-      }, {
-        handlerName: `${PluginName}-set-post-loader`,
+      const { cacheGroups } = compiler.options.optimization.splitChunks
+      Object.keys(compiler.options.entry).forEach((entryName) => {
+        cacheGroups[`${entryName}`] = {
+          name: entryName,
+          // eslint-disable-next-line arrow-body-style
+          test: (m, c, entry = entryName) => {
+            return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
+          },
+          chunks: 'all',
+          enforce: true,
+        }
       })
+    }, {
+      handlerName: `${PluginName}-set-post-loader`,
+    })
 
-      registerCompilerHook(compiler, 'thisCompilation', (compilation) => {
-        multiThemeHandler(compilation, options)
-      }, {
-        handlerName: `${PluginName}-thisCompilation`,
-      })
-    }
+    registerCompilerHook(compiler, 'thisCompilation', (compilation) => {
+      multiThemeHandler(compilation, options)
+    }, {
+      handlerName: `${PluginName}-thisCompilation`,
+    })
   }
 
   normalizeOptions(options) {
@@ -146,39 +116,6 @@ class WebpackCSSThmemePlugin {
       } else {
         return `${distChunkFilename}-${name}`
       }
-    }
-  }
-
-  async appendDataForPreProcesser(rules, options) {
-    const preProcessorName = options['pre-processor']
-    // TODO 暂时只支持less
-    if (preProcessorName !== 'less') {
-      throw new Error('not implemented')
-    }
-    const loaderName = `${preProcessorName}-loader`
-    const loaders = findLoaderByLoaderName(rules, loaderName)
-    if (loaders.length > 0) {
-      const themePath = options.themes[0].entryPath
-      loaders.forEach((loader) => {
-        loader.options = loader.options || {}
-        loader.options = mergeWithArray(loader.options, {
-          lessOptions: {
-            paths: [
-              path.dirname(themePath)
-            ]
-          }
-        })
-        Object.assign(loader.options, {
-          appendData(loaderApi) {
-            loaderApi.addDependency(themePath)
-            return fs.readFileSync(themePath)
-          }
-        })
-      })
-      return {}
-    } else {
-      throw new Error(`Webpack-css-themes-plugin merge loader options for ${
-        loaderName} faild: no loader found`)
     }
   }
 }

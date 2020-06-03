@@ -36,10 +36,6 @@ module.exports = {
     new WebpackCSSThemesPlugin({
       themes: [
         {
-          name: 'theme1',
-          entryPath: path.resolve(__dirname, 'src/theme/index.less')
-        },
-        {
           name: 'theme2',
           entryPath: path.resolve(__dirname, 'src/theme/index2.less')
         }

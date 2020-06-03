@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
 const WebpackCSSThemesPlugin = require('../../../../../src')
@@ -12,7 +11,6 @@ module.exports = {
       {
         test: /\.less$/i,
         use: [
-          MiniCssExtractPlugin.loader,
           'css-loader',
           'less-loader',
         ],
@@ -20,7 +18,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin(),
     new WebpackCSSThemesPlugin({
       themes: [{
         name: 'default',
