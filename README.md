@@ -6,15 +6,17 @@
 
 - 多路口支持
 - 多主题支持
-- 支持主题文件内包含变量外的规则
-- 自动注入loader，支持多loader
-- 支持主题文件引用其他文件，包括node_modules
-- 支持异步样式
+- 自动注入loader
+- 主题文件内可以包含变量外的规则
+- 主题文件可以引用其他文件，包括node_modules
+- 按需构建项目代码, 主题文件会注入所有项目使用的样式文件，而无需要求主题文件为样式入口
+- 支持异步chunks
 
 ## Requirement
 
 - Webpack: ^4.4.0 | ^5.0.0
 - less-loader: "^6.0.0"
+
 
 ## How to Use
 
@@ -54,7 +56,10 @@ module.exports = {
 }
 ```
 
-注意：项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
+注意
+
+1. 项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
+2. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要使用他们
 
 ## Options
 
