@@ -19,12 +19,9 @@
             "type": "string",
             "minLength": 1
           },
-          "distFileName": {
+          "distFilename": {
             "type": "string",
             "minLength": 1
-          },
-          "distChunkFilename": {
-            "type": "string"
           }
         }
       }

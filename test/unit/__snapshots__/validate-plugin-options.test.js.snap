@@ -14,5 +14,5 @@ exports[`validate options should throw an error on the "error pre-processor" opt
 exports[`validate options should throw an error on the "no theme" option with "{}" value 1`] = `
 "Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
  - configuration misses the property 'themes'. Should be:
-   [object { entryPath, name?, distFileName?, distChunkFilename? }, ...] (should not have fewer than 1 item)"
+   [object { entryPath, name?, distFilename? }, ...] (should not have fewer than 1 item)"
 `;
