@@ -1,3 +1,8 @@
+const path = require('path')
+const NativeModule = require('module')
+
+const loaderUtils = require('loader-utils')
+
 function findLoaderByLoaderName(rules, loaderName) {
   const result = []
   const regExp = new RegExp(loaderName, 'i')
@@ -36,7 +41,51 @@ function registerCompilerHook(compiler, hookName, handler, {
   }
 }
 
+function hotLoader(content, context) {
+  const accept = context.locals
+    ? ''
+    : 'module.hot.accept(undefined, cssReload);'
+
+  return `${content}
+    if(module.hot) {
+      // ${Date.now()}
+      var cssReload = require(${loaderUtils.stringifyRequest(
+    context.context,
+    path.join(__dirname, 'hmr/hotModuleReplacement.js')
+  )})(module.id, ${JSON.stringify({
+  ...context.options,
+  locals: !!context.locals,
+})});
+      module.hot.dispose(cssReload);
+      ${accept}
+    }
+  `
+}
+
+function evalModuleCode(loaderContext, code, filename) {
+  const module = new NativeModule(filename, loaderContext)
+
+  module.paths = NativeModule._nodeModulePaths(loaderContext.context)
+  module.filename = filename
+  module._compile(code, filename)
+
+  return module.exports
+}
+
+function findModuleById(modules, id) {
+  for (const module of modules) {
+    if (module.id === id) {
+      return module
+    }
+  }
+
+  return null
+}
+
 module.exports = {
   findLoaderByLoaderName,
-  registerCompilerHook
+  registerCompilerHook,
+  hotLoader,
+  evalModuleCode,
+  findModuleById
 }

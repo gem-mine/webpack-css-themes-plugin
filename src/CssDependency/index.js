@@ -6,7 +6,8 @@ class CssDependency extends webpack.Dependency {
       identifier, content, media, sourceMap
     },
     context,
-    identifierIndex
+    identifierIndex,
+    themeName
   ) {
     super()
 
@@ -16,6 +17,7 @@ class CssDependency extends webpack.Dependency {
     this.media = media
     this.sourceMap = sourceMap
     this.context = context
+    this.themeName = themeName
   }
 
   getResourceIdentifier() {
