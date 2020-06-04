@@ -9,7 +9,8 @@ const CssDependency = require('../CssDependency')
 const { PluginName } = require('../const')
 const {
   evalModuleCode,
-  findModuleById
+  findModuleById,
+  registerCompilerHook,
 } = require('../utils/webpack')
 
 // share across compilers
@@ -42,11 +43,15 @@ class ChildCompiler {
     )
     new LimitChunkCountPlugin({ maxChunks: 1 }).apply(childCompiler)
 
-    childCompiler.hooks.thisCompilation.tap(
-      `${PluginName} loader`,
+    registerCompilerHook(
+      childCompiler,
+      'thisCompilation',
+      `${PluginName}-thisCompilation`,
       (compilation) => {
-        compilation.hooks.normalModuleLoader.tap(
-          `${PluginName} loader`,
+        registerCompilerHook(
+          compilation,
+          'normalModuleLoader',
+          `${PluginName}-normalModuleLoader`,
           (loaderContext, module) => {
             // eslint-disable-next-line no-param-reassign
             loaderContext.emitFile = parentContext.emitFile
@@ -64,17 +69,22 @@ class ChildCompiler {
       }
     )
 
-    childCompiler.hooks.afterCompile.tap(PluginName, (compilation) => {
-      this.source = compilation.assets[childFilename]
+    registerCompilerHook(
+      childCompiler,
+      'afterCompile',
+      `${PluginName}-afterCompile`,
+      (compilation) => {
+        this.source = compilation.assets[childFilename]
         && compilation.assets[childFilename].source()
 
-      // Remove all chunk assets
-      compilation.chunks.forEach((chunk) => {
-        chunk.files.forEach((file) => {
-          delete compilation.assets[file] // eslint-disable-line no-param-reassign
+        // Remove all chunk assets
+        compilation.chunks.forEach((chunk) => {
+          chunk.files.forEach((file) => {
+            delete compilation.assets[file] // eslint-disable-line no-param-reassign
+          })
         })
-      })
-    })
+      }
+    )
   }
 
   async run(options, theme) {
