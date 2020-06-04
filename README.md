@@ -1,30 +1,37 @@
 # Webpack-css-themes-plugin
 
+English / [简体中文](./README.zh-CN.md)
+
 # Intro
 
-一次构建，输出多份主题
+Compile once and output multiple theme style sheets
 
-- 多路口支持
-- 多主题支持
-- 自动注入loader
-- 主题文件内可以包含变量外的规则
-- 主题文件可以引用其他文件，包括node_modules
-- 按需构建项目代码, 主题文件会注入所有项目使用的样式文件，无需要求主题文件为所有样式入口
-- 支持异步chunks
+- Support webpack multiple entries
+- Support `sass`/`less`
+- Theme files can contain rules other than variables
+- Theme files can refer to other files, including file in `node_modules`
+- Build on demand, theme file will be injected into the style files used by project
+- Support asynchronous chunks
+
+This project is inpired by [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
 
 ## Requirement
 
-- Webpack: ^4.4.0 | ^5.0.0
-- less-loader: "^6.0.0"
-
+- Webpack: \^4.4.0 | \^5.0.0
+- less-loader: "\^6.0.0"
+- sass-loader: "\^8.0.0"
 
 ## How to Use
 
-Webpack配置参考如下
-
 ```js
 
-const WebpackCSSThemesPlugin = require('../../src/plugin')
+const WebpackCSSThemesPlugin = require('webpack-css-themes-plugin')
+
+const ExcludeAssetsPlugin = require('@ianwalter/exclude-assets-plugin')
+// html-webpack-plugin < 4.X
+// const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   module: {
@@ -43,6 +50,10 @@ module.exports = {
           }
         ],
       },
+      {
+        test: /\.css$/i,
+        use: 'css-loader'
+      }
     ],
   },
   plugins: [
@@ -52,16 +63,24 @@ module.exports = {
         filePath: path.resolve(__dirname, 'src/theme/index.less')
       }]
     }),
+    // exclude css inject
+    new HtmlWebpackPlugin({
+      excludeAssets: [/\.css$/],
+      template: path.resolve(__dirname, './index.html'),
+    }),
+    new ExcludeAssetsPlugin()
   ],
 }
 ```
 
-注意
+Notice
 
-1. 项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
-2. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要使用他们
-3. 样式loader不能使用`style-loader`
-3. 如果你使用了`html-webpack-plugin`, 你需要过滤掉css的注入 // TODO 自动移除
+1. There is no need to reference `src/theme/index.less` in the project unless your project style sheet needs the variables in it.
+2. This plugin replaces `extract-text-plugin/mini-css-extract-plugin`, please do not use it together.
+3. This plugin should be used only on production builds without style-loader in the loaders chain.
+4. If you use `html-webpack-plugin`, you need to filter out the CSS injection.
+
+Get more usage from [`test cases`](/test/unit/cases).
 
 ## Options
 
@@ -69,40 +88,23 @@ module.exports = {
 
 Type: `Array<theme>`
 
-- theme.name(Type `string?`): 主题名称
-- theme.entryPath(Type `string`): 主题文件绝对路径
-- theme.distFilename(Type `string?`): 主题输出文件名，支持webpack变量`[hash]`
+- theme.name(Type `string?`): name of your theme
+- theme.entryPath(Type `string`): absolute path of your theme entry
+- theme.distFilename(Type `string?`): output file name for your theme, default: `[name].css`.
 
 ### pre-processor
 
 Type: `string`
 
-可选`less`/`sass`， 默认`less`
+`less` or `sass`, default `less`.
 
 ### publicPath
 
 Type: `String|Function`
 
-默认原项目的`publicPath`, 为函数时，入参数为:
+It will be the `publicPath` of the project by default.
 
-- resourcePath: 资源绝对路径
-- rootContext: webpack的resource Context
+When is a function, and the input parameters are:
 
-## Progress
-
-- [X] plugin参数与参数校验
-- [X] loader参数校验
-- [X] 支持单主题构建
-- [X] 支持多主题构建
-- [X] 支持postcss
-- [X] 支持css module
-- [X] 支持less-loader
-- [X] 支持sass-loader
-- [X] 更好的html-webpack-plugin处理
-- [ ] 主题加载器
-  - [ ] 提供主题文件加载器
-  - [ ] dev开发模式
-
-## May Support
-
-- [ ] 提供 `less`/`sass`混编
+- resourcePath: absolute path of resourcePath
+- rootContext: webpack's resource Context
