@@ -29,10 +29,6 @@ class WebpackCSSThmemePlugin {
   apply(compiler) {
     const options = _.cloneDeep(this.options)
     const preProcessorName = options['pre-processor']
-    // TODO 暂时只支持less
-    if (preProcessorName !== 'less') {
-      throw new Error('not implemented')
-    }
     registerCompilerHook(compiler, 'beforeRun', () => {
       const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
       const { rules } = compiler.options.module

@@ -57,34 +57,48 @@ async function pitch(request) {
 
 function getLoadersForTheme(loaders, theme, options) {
   const themeLoaders = _.cloneDeep(loaders)
+  const themePath = theme.entryPath
   const preProcessorName = options['pre-processor']
-  // TODO 暂时只支持less
-  if (preProcessorName !== 'less') {
-    throw new Error('not implemented')
+
+  let loaderOptions
+  switch (preProcessorName) {
+    case 'less':
+      loaderOptions = {
+        lessOptions: {
+          paths: [
+            path.dirname(themePath)
+          ]
+        },
+        appendData(loaderApi) {
+          loaderApi.addDependency(themePath)
+          return fs.readFileSync(themePath)
+        }
+      }
+      break
+    case 'sass':
+      loaderOptions = {
+        sassOptions: {
+          includePaths: [
+            path.dirname(themePath)
+          ]
+        },
+        prependData(loaderApi) {
+          loaderApi.addDependency(themePath)
+          return fs.readFileSync(themePath)
+        }
+      }
+      break
+    // no default
   }
+
   const loaderName = `${preProcessorName}-loader`
   const loader = findLoaderByLoaderName(themeLoaders, loaderName)
   if (loader) {
-    loader.options = loader.options || {}
-    const themePath = theme.entryPath
-    loader.options = loader.options || {}
-    loader.options = mergeWithArray(loader.options, {
-      lessOptions: {
-        paths: [
-          path.dirname(themePath)
-        ]
-      }
-    })
-    Object.assign(loader.options, {
-      appendData(loaderApi) {
-        loaderApi.addDependency(themePath)
-        return fs.readFileSync(themePath)
-      }
-    })
+    loader.options = mergeWithArray(loader.options || {}, loaderOptions)
     return themeLoaders
   } else {
-    throw new Error(`Webpack-css-themes-plugin merge loader options for ${
-      loaderName} faild: no loader found`)
+    // must be pure css-loader
+    return themeLoaders
   }
 }
 
