@@ -2,7 +2,9 @@ const path = require('path')
 
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+const ExcludeAssetsPlugin = require('@ianwalter/exclude-assets-plugin')
+// html-webpack-plugin < 4.X
+// const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 const baseConfig = require('./src/webpack.config')
 
 const absoluteEntry = {}
@@ -29,7 +31,9 @@ module.exports = merge(baseConfig, {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      excludeAssets: [/\.css$/],
       template: path.resolve(__dirname, './index.html'),
     }),
+    new ExcludeAssetsPlugin()
   ]
 })
