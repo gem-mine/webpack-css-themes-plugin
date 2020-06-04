@@ -1,6 +1,6 @@
 {
   "name": "webpack-css-themes-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://git.sdp.nd/gem-mine/webpack-css-themes-plugin.git"
+    "url": "https://github.com/gem-mine/webpack-css-themes-plugin.git"
   },
   "keywords": [
     "webpack",
