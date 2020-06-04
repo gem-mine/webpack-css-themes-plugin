@@ -9,7 +9,8 @@ const multiThemeHandler = require('./multiThemeHandler')
 
 const {
   registerCompilerHook,
-  recursiveIssuer
+  recursiveIssuer,
+  recursiveChunkGroup,
 } = require('../utils/webpack')
 
 const DefaultFileName = '[name].css'
@@ -51,7 +52,10 @@ class WebpackCSSThmemePlugin {
           test: (m, c, entry = entryName) => {
             return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
           },
-          chunks: 'all',
+          // eslint-disable-next-line arrow-body-style
+          chunks: (chunk) => {
+            return recursiveChunkGroup(chunk, entryName)
+          },
           enforce: true,
         }
       })

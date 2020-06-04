@@ -1,4 +1,5 @@
 const NativeModule = require('module')
+const EntryPoint = require('webpack/lib/Entrypoint')
 
 function findLoaderByLoaderName(rules, loaderName) {
   const result = []
@@ -46,6 +47,20 @@ function recursiveIssuer(module, entryName) {
   }
 }
 
+function recursiveChunkGroup(chunk, entryName) {
+  const [chunkGroup] = chunk.groupsIterable
+  return _recursiveChunkGroup(chunkGroup, entryName)
+}
+
+function _recursiveChunkGroup(chunkGroup, entryName) {
+  if (chunkGroup instanceof EntryPoint) {
+    return chunkGroup.name === entryName
+  } else {
+    const [chunkParent] = chunkGroup.getParents()
+    return _recursiveChunkGroup(chunkParent, entryName)
+  }
+}
+
 function evalModuleCode(loaderContext, code, filename) {
   const module = new NativeModule(filename, loaderContext)
 
@@ -70,6 +85,7 @@ module.exports = {
   findLoaderByLoaderName,
   registerCompilerHook,
   recursiveIssuer,
+  recursiveChunkGroup,
   evalModuleCode,
   findModuleById
 }
