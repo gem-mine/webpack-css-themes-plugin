@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const globby = require('globby')
 const webpack = require('webpack')
@@ -6,6 +6,9 @@ const webpack = require('webpack')
 describe('TestCases', () => {
   const casesDirectoryBase = path.resolve(__dirname, 'cases')
   const outputDirectoryBase = path.resolve(__dirname, 'tmp')
+  beforeAll(() => {
+    fs.removeSync(outputDirectoryBase)
+  })
 
   const casesDirectory = globby.sync('*/*', {
     cwd: casesDirectoryBase,
