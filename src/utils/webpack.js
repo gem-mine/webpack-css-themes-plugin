@@ -23,28 +23,6 @@ function _traverseRule(rule, regExp, result) {
   }
 }
 
-function registerCompilerHook(compiler, hookName, _handlerName, _handler) {
-  const handleNameForRegister = typeof _handlerName === 'function'
-    ? hookName : _handlerName || hookName
-  const handler = typeof _handlerName === 'function' ? _handlerName : _handler
-  if (compiler.hooks) {
-    compiler.hooks[hookName].tap(handleNameForRegister, handler)
-  } else {
-    compiler.plugin(hookName, handler)
-  }
-}
-
-function registerCompilerHookAsync(compiler, hookName, _handlerName, _handler) {
-  const handleNameForRegister = typeof _handlerName === 'function'
-    ? hookName : _handlerName || hookName
-  const handler = typeof _handlerName === 'function' ? _handlerName : _handler
-  if (compiler.hooks) {
-    compiler.hooks[hookName].tapAsync(handleNameForRegister, handler)
-  } else {
-    compiler.plugin(hookName, handler)
-  }
-}
-
 function recursiveIssuer(module, entryName) {
   if (module.issuer) {
     return recursiveIssuer(module.issuer, entryName)
@@ -89,8 +67,6 @@ function findModuleById(modules, id) {
 
 module.exports = {
   findLoaderByLoaderName,
-  registerCompilerHook,
-  registerCompilerHookAsync,
   recursiveIssuer,
   recursiveChunkGroup,
   evalModuleCode,

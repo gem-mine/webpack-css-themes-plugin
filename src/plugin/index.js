@@ -29,7 +29,7 @@ class WebpackCSSThmemePlugin {
   apply(compiler) {
     const options = _.cloneDeep(this.options)
     const preProcessorName = options['pre-processor']
-    registerCompilerHook(compiler, 'beforeRun', `${PluginName}-set-post-loader`, () => {
+    compiler.hooks.beforeRun.tap(`${PluginName}_beforeRun`, () => {
       const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
       const { rules } = compiler.options.module
       rules.push({
@@ -55,10 +55,14 @@ class WebpackCSSThmemePlugin {
           enforce: true,
         }
       })
+    }, {
+      handlerName: `${PluginName}-set-post-loader`,
     })
 
-    registerCompilerHook(compiler, 'thisCompilation', `${PluginName}-thisCompilation`, (compilation) => {
+    compiler.hooks.thisCompilation.tap(`${PluginName}_thisCompilation`, (compilation) => {
       multiThemeHandler(compilation, options)
+    }, {
+      handlerName: `${PluginName}-thisCompilation`,
     })
   }
 
