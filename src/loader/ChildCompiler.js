@@ -130,7 +130,7 @@ class ChildCompiler {
               const module = findModuleById(compilation.modules, id)
 
               return {
-                identifier: module.identifier(),
+                identifier: `${module.identifier()}?themeName=${theme.name}`,
                 context: module.context,
                 content,
                 media,

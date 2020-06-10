@@ -31,17 +31,17 @@ function recursiveIssuer(module, entryName) {
   }
 }
 
-function recursiveChunkGroup(chunk, entryName) {
+function recursiveChunkGroup(chunk) {
   const [chunkGroup] = chunk.groupsIterable
-  return _recursiveChunkGroup(chunkGroup, entryName)
+  return _recursiveChunkGroup(chunkGroup)
 }
 
-function _recursiveChunkGroup(chunkGroup, entryName) {
+function _recursiveChunkGroup(chunkGroup) {
   if (chunkGroup instanceof EntryPoint) {
-    return chunkGroup.name === entryName
+    return chunkGroup.name
   } else {
     const [chunkParent] = chunkGroup.getParents()
-    return _recursiveChunkGroup(chunkParent, entryName)
+    return _recursiveChunkGroup(chunkParent)
   }
 }
 

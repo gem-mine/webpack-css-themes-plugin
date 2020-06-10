@@ -39,21 +39,6 @@ class WebpackCSSThmemePlugin {
           options,
         }
       })
-      const { cacheGroups } = compiler.options.optimization.splitChunks
-      Object.keys(compiler.options.entry).forEach((entryName) => {
-        cacheGroups[`${entryName}`] = {
-          name: entryName,
-          // eslint-disable-next-line arrow-body-style
-          test: (m, c, entry = entryName) => {
-            return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
-          },
-          // eslint-disable-next-line arrow-body-style
-          chunks: (chunk) => {
-            return recursiveChunkGroup(chunk, entryName)
-          },
-          enforce: true,
-        }
-      })
     }, {
       handlerName: `${PluginName}-set-post-loader`,
     })
@@ -82,19 +67,6 @@ class WebpackCSSThmemePlugin {
         themeNameList.push(theme.name)
       }
       theme.distFilename = theme.distFilename || DefaultFileName
-      if (!theme.distChunkFilename) {
-        const { distFilename } = theme
-        // Anything changing depending on chunk is fine
-        if (distFilename.match(RegPlaceHolder)) {
-          theme.distChunkFilename = distFilename
-        } else {
-          // Elsewise prefix '[id].' in front of the basename to make it changing
-          theme.distChunkFilename = distFilename.replace(
-            /(^|\/)([^/]*(?:\?|$))/,
-            '$1[id].$2'
-          )
-        }
-      }
       return theme
     })
     options.moduleFilename = (themeName) => {
@@ -104,16 +76,6 @@ class WebpackCSSThmemePlugin {
         return distFilename.replace(/(\.)/, `-${name}.`)
       } else {
         return `${distFilename}-${name}`
-      }
-    }
-
-    options.chunkFilename = (themeName) => {
-      const themeIndex = options.themeMap[themeName]
-      const { distChunkFilename, name } = options.themes[themeIndex]
-      if (/\.+/.test(distChunkFilename)) {
-        return distChunkFilename.replace(/(\.)/, `-${name}.`)
-      } else {
-        return `${distChunkFilename}-${name}`
       }
     }
   }

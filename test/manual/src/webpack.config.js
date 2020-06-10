@@ -14,21 +14,21 @@ module.exports = {
           'css-loader',
           'less-loader',
         ],
-      },
-      {
-        test: /\.css$/i,
-        use: [
-          'css-loader'
-        ],
       }
     ],
   },
   plugins: [
     new WebpackCSSThemesPlugin({
-      themes: [{
-        name: 'default',
-        entryPath: path.resolve(__dirname, 'theme/index.less')
-      }],
+      themes: [
+        {
+          name: 'default',
+          entryPath: path.resolve(__dirname, 'theme/index.less')
+        },
+        {
+          name: 'default2',
+          entryPath: path.resolve(__dirname, 'theme/index2.less')
+        }
+      ]
     }),
   ],
 }

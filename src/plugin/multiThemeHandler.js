@@ -11,6 +11,11 @@ const {
   util: { createHash },
 } = webpack
 
+const {
+  recursiveIssuer,
+  recursiveChunkGroup,
+} = require('../utils/webpack')
+
 const { PluginName, MODULE_TYPE } = require('../const')
 
 const REGEXP_CHUNKHASH = /\[chunkhash(?::(\d+))?\]/i
@@ -29,6 +34,25 @@ function multiThemeHandler(compilation, options) {
     new CssDependencyTemplate()
   )
 
+  // groupBy [themeName][entryName]
+  const cssModulesFromChunk = {}
+  options.themes.forEach((theme) => {
+    cssModulesFromChunk[theme.name] = []
+  })
+
+  compilation.hooks.beforeChunkAssets.tap(PluginName, () => {
+    const chunksForChunkTemplate = compilation.chunks.filter((chunk) => !chunk.hasRuntime())
+    chunksForChunkTemplate.forEach((chunk) => {
+      const renderedModules = Array.from(chunk.modulesIterable).filter(
+        (module) => module.type === MODULE_TYPE
+      )
+      renderedModules.forEach((module) => {
+        const { themeName } = module
+        cssModulesFromChunk[themeName].push(module)
+      })
+    })
+  })
+
   compilation.mainTemplate.hooks.renderManifest.tap(PluginName, (result, { chunk }) => {
     const renderedModules = Array.from(chunk.modulesIterable).filter(
       (module) => module.type === MODULE_TYPE
@@ -42,7 +66,10 @@ function multiThemeHandler(compilation, options) {
           render: () => renderContentAsset(
             compilation,
             chunk,
-            renderedModulesByTheme,
+            [
+              ...renderedModulesByTheme,
+              ...cssModulesFromChunk[themeName]
+            ],
             compilation.runtimeTemplate.requestShortener
           ),
           filenameTemplate: () => options.moduleFilename(themeName),
@@ -54,55 +81,6 @@ function multiThemeHandler(compilation, options) {
           hash: chunk.contentHash[MODULE_TYPE],
         })
       })
-    }
-  })
-
-  compilation.chunkTemplate.hooks.renderManifest.tap(PluginName, (result, { chunk }) => {
-    const renderedModules = Array.from(chunk.modulesIterable).filter(
-      (module) => module.type === MODULE_TYPE
-    )
-
-    if (renderedModules.length > 0) {
-      const renderedModulesGroup = _.groupBy(renderedModules, 'themeName')
-      Object.keys(renderedModulesGroup).forEach((themeName) => {
-        const renderedModulesByTheme = renderedModulesGroup[themeName]
-        result.push({
-          render: () => renderContentAsset(
-            compilation,
-            chunk,
-            renderedModulesByTheme,
-            compilation.runtimeTemplate.requestShortener
-          ),
-          filenameTemplate: () => options.chunkFilename(themeName),
-          pathOptions: {
-            chunk,
-            contentHashType: MODULE_TYPE,
-          },
-          identifier: `${PluginName}.${themeName}.${chunk.id}`,
-          hash: chunk.contentHash[MODULE_TYPE],
-        })
-      })
-    }
-  })
-
-  compilation.mainTemplate.hooks.hashForChunk.tap(PluginName, (hash, chunk) => {
-    // one theme need chunkHash is enough
-    const chunkFilename = options.themes.map((theme) => theme.distChunkFilename).join('&')
-
-    if (REGEXP_CHUNKHASH.test(chunkFilename)) {
-      hash.update(JSON.stringify(chunk.getChunkMaps(true).hash))
-    }
-
-    if (REGEXP_CONTENTHASH.test(chunkFilename)) {
-      hash.update(
-        JSON.stringify(
-          chunk.getChunkMaps(true).contentHash[MODULE_TYPE] || {}
-        )
-      )
-    }
-
-    if (REGEXP_NAME.test(chunkFilename)) {
-      hash.update(JSON.stringify(chunk.getChunkMaps(true).name))
     }
   })
 
