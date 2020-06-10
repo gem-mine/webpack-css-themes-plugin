@@ -41,8 +41,8 @@ class WebpackCSSThmemePlugin {
       })
       const { cacheGroups } = compiler.options.optimization.splitChunks
       Object.keys(compiler.options.entry).forEach((entryName) => {
-        cacheGroups[`${entryName}-theme`] = {
-          name: `${entryName}-theme`,
+        cacheGroups[`${entryName}`] = {
+          name: entryName,
           // eslint-disable-next-line arrow-body-style
           test: (m, c, entry = entryName) => {
             return m.constructor.name === 'CssModule' && recursiveIssuer(m, entry)
