@@ -8,7 +8,6 @@ const schema = require('../plugin-options.json')
 const multiThemeHandler = require('./multiThemeHandler')
 
 const {
-  registerCompilerHook,
   recursiveIssuer,
   recursiveChunkGroup,
 } = require('../utils/webpack')
