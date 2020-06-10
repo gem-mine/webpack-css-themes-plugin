@@ -16,6 +16,15 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "manual dev-server",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}\\test\\manual\\devServer.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "manual test",
       "skipFiles": [
         "<node_internals>/**"
