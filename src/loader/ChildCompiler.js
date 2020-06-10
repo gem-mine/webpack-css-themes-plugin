@@ -119,10 +119,13 @@ class ChildCompiler {
           return reject(new Error("Didn't get a result from child compiler"))
         }
 
+        let locals
+
         try {
           let dependencies
           let exports = evalModuleCode(this.parentContext, this.source, this.request)
           exports = exports.__esModule ? exports.default : exports
+          locals = exports && exports.locals
           if (!Array.isArray(exports)) {
             dependencies = [[null, exports]]
           } else {
@@ -142,8 +145,15 @@ class ChildCompiler {
         } catch (e) {
           return reject(e)
         }
-
-        return resolve(`// extracted by ${PluginName}`)
+        // css module hash 规则为取 ${request}+${unescape(localName)}
+        // 与具体内容无关, so locals多个主题相同，任意取即可
+        let resultSource = `// extracted by ${PluginName}`
+        const result = locals
+          ? `\nmodule.exports =${JSON.stringify(
+            locals
+          )};` : ''
+        resultSource += result
+        return resolve(resultSource)
       })
     })
   }
