@@ -29,7 +29,7 @@ class WebpackCSSThmemePlugin {
   apply(compiler) {
     const options = _.cloneDeep(this.options)
     const preProcessorName = options['pre-processor']
-    compiler.hooks.beforeRun.tap(`${PluginName}_beforeRun`, () => {
+    compiler.hooks.afterEnvironment.tap(`${PluginName}_afterEnvironment`, () => {
       const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
       const { rules } = compiler.options.module
       rules.push({
