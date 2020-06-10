@@ -10,25 +10,44 @@ module.exports = {
     rules: [
       {
         test: /\.less$/i,
-        use: [
-          'css-loader',
-          'less-loader',
-        ],
+        oneOf: [
+          /* config.module.rule('less').rule('css-modules') */
+          {
+            test: /\.module\.\w+$/,
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: undefined,
+                  importLoaders: 1,
+                  modules: {
+                    localIdentName: '[name]_[local]_[hash:base64:5]'
+                  }
+                }
+              },
+              'less-loader'
+            ]
+          },
+          /* config.module.rule('less').rule('normal') */
+          {
+            use: [
+              'css-loader',
+              'less-loader'
+            ]
+          }
+        ]
       }
     ],
   },
   plugins: [
     new WebpackCSSThemesPlugin({
-      themes: [
-        {
-          name: 'default',
-          entryPath: path.resolve(__dirname, 'theme/index.less')
-        },
-        {
-          name: 'default2',
-          entryPath: path.resolve(__dirname, 'theme/index2.less')
-        }
-      ]
+      themes: [{
+        name: 'default',
+        entryPath: path.resolve(__dirname, 'theme/index.less')
+      }, {
+        name: 'default2',
+        entryPath: path.resolve(__dirname, 'theme/index2.less')
+      }],
     }),
   ],
 }

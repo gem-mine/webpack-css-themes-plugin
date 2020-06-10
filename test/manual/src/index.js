@@ -1,4 +1,4 @@
 import './style.less'
+import cssVars from './style.module.less'
 
-/* eslint-disable-next-line no-unused-expressions */
-import('./async')
+console.log(cssVars)
