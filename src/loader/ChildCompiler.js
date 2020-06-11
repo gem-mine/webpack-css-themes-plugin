@@ -5,7 +5,7 @@ const SingleEntryPlugin = require('webpack/lib/SingleEntryPlugin')
 const LimitChunkCountPlugin = require('webpack/lib/optimize/LimitChunkCountPlugin')
 
 const CssDependency = require('../CssDependency')
-
+const { hotLoader } = require('../utils/webpack')
 const { PluginName } = require('../const')
 const {
   evalModuleCode,
@@ -152,7 +152,9 @@ class ChildCompiler {
           ? `\nmodule.exports =${JSON.stringify(
             locals
           )};` : ''
-        resultSource += result
+        resultSource += process.env.NODE_ENV === 'development'
+          ? hotLoader(result, { context: this.context, options, locals })
+          : result
         return resolve(resultSource)
       })
     })

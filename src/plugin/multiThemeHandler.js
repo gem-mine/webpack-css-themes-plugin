@@ -11,16 +11,7 @@ const {
   util: { createHash },
 } = webpack
 
-const {
-  recursiveIssuer,
-  recursiveChunkGroup,
-} = require('../utils/webpack')
-
 const { PluginName, MODULE_TYPE } = require('../const')
-
-const REGEXP_CHUNKHASH = /\[chunkhash(?::(\d+))?\]/i
-const REGEXP_CONTENTHASH = /\[contenthash(?::(\d+))?\]/i
-const REGEXP_NAME = /\[name\]/i
 
 
 function multiThemeHandler(compilation, options) {

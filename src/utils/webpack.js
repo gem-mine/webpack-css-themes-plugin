@@ -1,5 +1,9 @@
 const NativeModule = require('module')
+const path = require('path')
+const loaderUtils = require('loader-utils')
+
 const EntryPoint = require('webpack/lib/Entrypoint')
+
 
 function findLoaderByLoaderName(rules, loaderName) {
   const result = []
@@ -65,9 +69,31 @@ function findModuleById(modules, id) {
   return null
 }
 
+function hotLoader(content, context) {
+  const accept = context.locals
+    ? ''
+    : 'module.hot.accept(undefined, cssReload);'
+
+  return `${content}
+    if(module.hot) {
+      // ${Date.now()}
+      var cssReload = require(${loaderUtils.stringifyRequest(
+    context.context,
+    path.join(__dirname, 'hmr/hotModuleReplacement.js')
+  )})(module.id, ${JSON.stringify({
+  ...context.options,
+  locals: !!context.locals,
+})});
+      module.hot.dispose(cssReload);
+      ${accept}
+    }
+  `
+}
+
 module.exports = {
   findLoaderByLoaderName,
   recursiveIssuer,
+  hotLoader,
   recursiveChunkGroup,
   evalModuleCode,
   findModuleById
