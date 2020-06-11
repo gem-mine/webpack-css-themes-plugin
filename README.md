@@ -60,7 +60,7 @@ module.exports = {
     new WebpackCSSThemesPlugin({
       themes: [{
         name: 'default',
-        filePath: path.resolve(__dirname, 'src/theme/index.less')
+        entryPath: path.resolve(__dirname, 'src/theme/index.less')
       }]
     }),
     // exclude css inject
