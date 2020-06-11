@@ -75,7 +75,6 @@ module.exports = {
 
 1. 项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
 2. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要一起使用
-3. 样式loader链中不能使用`style-loader`
 3. 如果你使用了`html-webpack-plugin`, 你需要过滤掉css的注入
 
 更多用法请参考[`测试用例`](/test/unit/cases).

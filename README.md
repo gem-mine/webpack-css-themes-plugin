@@ -77,8 +77,7 @@ Notice
 
 1. There is no need to reference `src/theme/index.less` in the project unless your project style sheet needs the variables in it.
 2. This plugin replaces `extract-text-plugin/mini-css-extract-plugin`, please do not use it together.
-3. This plugin should be used only on production builds without style-loader in the loaders chain.
-4. If you use `html-webpack-plugin`, you need to filter out the CSS injection.
+3. If you use `html-webpack-plugin`, you need to filter out the CSS injection.
 
 Get more usage from [`test cases`](/test/unit/cases).
 
