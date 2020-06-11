@@ -7,13 +7,7 @@ const { PluginName } = require('../const')
 const schema = require('../plugin-options.json')
 const multiThemeHandler = require('./multiThemeHandler')
 
-const {
-  recursiveIssuer,
-  recursiveChunkGroup,
-} = require('../utils/webpack')
-
 const DefaultFileName = '[name].css'
-const RegPlaceHolder = /\[(name|id|chunkhash)\]/g
 
 class WebpackCSSThmemePlugin {
   constructor(options) {
@@ -28,8 +22,11 @@ class WebpackCSSThmemePlugin {
   apply(compiler) {
     const options = _.cloneDeep(this.options)
     const preProcessorName = options['pre-processor']
+    const extRegStr = preProcessorName === 'less'
+      ? preProcessorName
+      : 's[a|c]ss'
     compiler.hooks.afterEnvironment.tap(`${PluginName}_afterEnvironment`, () => {
-      const extReg = new RegExp(`\\.(${preProcessorName}|css)$`, 'i')
+      const extReg = new RegExp(`\\.(${extRegStr}|css)$`, 'i')
       const { rules } = compiler.options.module
       rules.push({
         test: extReg,
