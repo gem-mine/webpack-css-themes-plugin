@@ -35,7 +35,7 @@ function recursiveIssuer(module, entryName) {
   }
 }
 
-function recursiveChunkGroup(chunk) {
+function recursiveChunkEntryName(chunk) {
   const [chunkGroup] = chunk.groupsIterable
   return _recursiveChunkGroup(chunkGroup)
 }
@@ -79,7 +79,7 @@ function hotLoader(content, context) {
       // ${Date.now()}
       var cssReload = require(${loaderUtils.stringifyRequest(
     context.context,
-    path.join(__dirname, 'hmr/hotModuleReplacement.js')
+    path.join(__dirname, '../hmr/hotModuleReplacement.js')
   )})(module.id, ${JSON.stringify({
   ...context.options,
   locals: !!context.locals,
@@ -94,7 +94,7 @@ module.exports = {
   findLoaderByLoaderName,
   recursiveIssuer,
   hotLoader,
-  recursiveChunkGroup,
+  recursiveChunkEntryName,
   evalModuleCode,
   findModuleById
 }
