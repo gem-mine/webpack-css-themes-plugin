@@ -153,7 +153,7 @@ class ChildCompiler {
             locals
           )};` : ''
         resultSource += process.env.NODE_ENV === 'development'
-          ? hotLoader(result, { context: this.context, options, locals })
+          ? hotLoader(result, { context: this.parentContext.context, options, locals })
           : result
         return resolve(resultSource)
       })
