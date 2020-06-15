@@ -13,11 +13,23 @@
 - 按需构建，主题文件会注入到每个被引用的样式文件
 - 支持异步chunks
 
+本插件支持所有在Dist包中提供样式源文件的组件库，比如 [ant-design](https://ant.design/), [element-ui]等
+
+# 对比
+
+与[Ant-Design官方的多主题解决方案](https://ant.design/docs/react/customize-theme)相比
+
+1. 一次输出多份主题，使得线上切换成为可能
+2. 按需构建主题，而不是全量构建全部组件库的主题(`using Umi 3`)
+3. 使用`webpack`内置的构建链，使得`webpack`内置的后处理(`post-css`, `minify`)等可以直接支持，无需额外处理
+
 ## 要求
 
 - Webpack: \^4.4.0 | \^5.0.0
 - less-loader: "\^6.0.0"
 - sass-loader: "\^8.0.0"
+
+对于`webpack@3`用户, 请使用[`webpack-css-themes-plugin-legacy`](https://www.npmjs.com/package/webpack-css-themes-plugin-legacy)
 
 ## 范例
 

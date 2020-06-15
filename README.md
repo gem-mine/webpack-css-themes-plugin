@@ -15,11 +15,23 @@ Compile once and output multiple theme style sheets
 
 This project is inpired by [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
 
+This should support [ant-design](https://ant.design/), [element-ui](https://element.eleme.io/), which provide source style code in dist packages
+
+# Comparison
+
+Compare with [Ant-Design's offical theme solution](https://ant.design/docs/react/customize-theme)
+
+1. Support output multi-theme css in one compile
+2. compile on demand, not fully compile css(`using Umi 3`)
+3. use webpack build chain to get full style post-process support like `post-css` and `minify`
+
 ## Requirement
 
 - Webpack: \^4.4.0 | \^5.0.0
 - less-loader: "\^6.0.0"
 - sass-loader: "\^8.0.0"
+
+If you're using `webpack@3`, try [`webpack-css-themes-plugin-legacy`](https://www.npmjs.com/package/webpack-css-themes-plugin-legacy)
 
 ## How to Use
 
