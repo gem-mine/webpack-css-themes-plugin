@@ -93,6 +93,55 @@ Notice
 
 Get more usage from [`test cases`](/test/unit/cases).
 
+## ThemeLoad && Switch
+
+you should load your theme css manual asap before dom render to avoid page flashes
+
+```ts
+const Const = {
+  styleAttrKey: 'theme-css-name',
+  styleAttrValue: 'switchable-theme'
+}
+
+async function setThemeStyleSheet() {
+  const docHead = document.head
+  const existedStylelinkList = Array.from(document.getElementsByTagName('link'))
+    .filter((t) => t.getAttribute(Const.styleAttrKey) === Const.styleAttrValue)
+  await Promise.all(this.themePaths.map((themePath) => {
+    let resolve
+    const p = new Promise((_resolve) => {
+      resolve = _resolve
+    })
+    const linkDOM = document.createElement('link')
+    linkDOM.setAttribute('rel', 'stylesheet')
+    linkDOM.setAttribute('type', 'text/css')
+    linkDOM.setAttribute('href', themePath)
+    linkDOM.setAttribute(Const.styleAttrKey, Const.styleAttrValue)
+
+    let onScriptComplete: (event) => void
+    const timeout = setTimeout(() => {
+      onScriptComplete({ type: 'timeout', target: linkDOM })
+    }, 120000)
+    onScriptComplete = () => {
+      onScriptComplete = () => {}
+      // avoid mem leaks in IE.
+      linkDOM.onerror = null
+      linkDOM.onload = null
+      clearTimeout(timeout)
+      resolve()
+    }
+    linkDOM.onerror = onScriptComplete
+    linkDOM.onload = onScriptComplete
+    docHead.appendChild(linkDOM)
+    return p as Promise<void>
+  }))
+
+  existedStylelinkList.forEach((t) => {
+    t.parentNode?.removeChild(t)
+  })
+}
+```
+
 ## Options
 
 ### themes
