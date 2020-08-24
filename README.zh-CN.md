@@ -31,7 +31,9 @@
 
 对于`webpack@3`用户, 请使用[`webpack-css-themes-plugin-legacy`](https://www.npmjs.com/package/webpack-css-themes-plugin-legacy)
 
-## 范例
+## 如何使用
+
+1. webpack配置
 
 ```js
 
@@ -86,59 +88,39 @@ module.exports = {
 注意
 
 1. 项目中无需引用`src/theme/index.less`, 除非你的项目样式表需要其中的变量
-2. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要一起使用
-3. 如果你使用了`html-webpack-plugin`, 你需要过滤掉css的注入
+1. 此插件替代了`extract-text-plugin/mini-css-extract-plugin`， 请不要一起使用
+2. 如果你使用了`html-webpack-plugin`, 你需要过滤掉css的注入
 
 更多用法请参考[`测试用例`](/test/unit/cases).
 
-## 主题加载和切换
+2. 使用组件库的按需加载
 
-需要手动加载主题CSS,而且最好在DOM渲染之前加载防止页面抖动
+以antd为例，注意样式必须加载 less 格式，一个常见的问题就是引入了多份样式，less 的样式被 css 的样式覆盖了。
 
-```ts
-const Const = {
-  styleAttrKey: 'theme-css-name',
-  styleAttrValue: 'switchable-theme'
-}
+如果你在使用 babel-plugin-import 的 style 配置来引入样式，需要将配置值从 'css' 改为 true，这样会引入 less 文件。
 
-async function setThemeStyleSheet() {
-  const docHead = document.head
-  const existedStylelinkList = Array.from(document.getElementsByTagName('link'))
-    .filter((t) => t.getAttribute(Const.styleAttrKey) === Const.styleAttrValue)
-  await Promise.all(this.themePaths.map((themePath) => {
-    let resolve
-    const p = new Promise((_resolve) => {
-      resolve = _resolve
-    })
-    const linkDOM = document.createElement('link')
-    linkDOM.setAttribute('rel', 'stylesheet')
-    linkDOM.setAttribute('type', 'text/css')
-    linkDOM.setAttribute('href', themePath)
-    linkDOM.setAttribute(Const.styleAttrKey, Const.styleAttrValue)
+如果你是通过 'antd/dist/antd.css' 引入样式的，改为 antd/dist/antd.less。
 
-    let onScriptComplete: (event) => void
-    const timeout = setTimeout(() => {
-      onScriptComplete({ type: 'timeout', target: linkDOM })
-    }, 120000)
-    onScriptComplete = () => {
-      onScriptComplete = () => {}
-      // avoid mem leaks in IE.
-      linkDOM.onerror = null
-      linkDOM.onload = null
-      clearTimeout(timeout)
-      resolve()
-    }
-    linkDOM.onerror = onScriptComplete
-    linkDOM.onload = onScriptComplete
-    docHead.appendChild(linkDOM)
-    return p as Promise<void>
-  }))
+3. 项目代码中，不要引用主题文件，本插件会注入到任意项目引用的样式表中
 
-  existedStylelinkList.forEach((t) => {
-    t.parentNode?.removeChild(t)
-  })
-}
+4. 加载切换主题
+
+可以使用[webpack-theme-set](https://www.npmjs.com/package/webpack-theme-set)，也可以自行实现。
+
+原理就是注入CSS Link和修改CSS Link
+
+```js
+import themeSetter from 'webpack-theme-set'
+// inital set Theme
+themeSetter.setTheme('light', {
+  prefix: 'main-'
+}).then(() => {
+   ReactDOM.render(.....)
+})
+// switch Theme
+themeSetter.setTheme('light')
 ```
+
 
 ## 参数
 

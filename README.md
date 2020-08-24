@@ -120,6 +120,8 @@ themeSetter.setTheme('light', {
 themeSetter.setTheme('light')
 ```
 
+or your can load it yourself. just insert/remove `style` DOM to make it work.
+
 ## Options
 
 ### themes
