@@ -35,6 +35,8 @@ If you're using `webpack@3`, try [`webpack-css-themes-plugin-legacy`](https://ww
 
 ## How to Use
 
+1. webpack config
+
 ```js
 
 const WebpackCSSThemesPlugin = require('webpack-css-themes-plugin')
@@ -87,12 +89,12 @@ module.exports = {
 
 Notice
 
-1. There is no need to reference `src/theme/index.less` in the project unless your project style sheet needs the variables in it.
-2. This plugin replaces `extract-text-plugin/mini-css-extract-plugin`, please do not use it together.
-3. If you use `html-webpack-plugin`, you need to filter out the CSS injection.
+1. This plugin replaces `extract-text-plugin/mini-css-extract-plugin`, please do not use it together.
+2. If you use `html-webpack-plugin`, you need to filter out the CSS injection.
 
 Get more usage from [`test cases`](/test/unit/cases).
 
+<<<<<<< HEAD
 ## ThemeLoad && Switch
 
 you should load your theme css manual asap before dom render to avoid page flashes
@@ -140,6 +142,32 @@ async function setThemeStyleSheet() {
     t.parentNode?.removeChild(t)
   })
 }
+=======
+2. use import on demand of your component framework
+
+Take antd for example, you must import styles as less format. A common mistake would be importing multiple copied of styles that some of them are css format to override the less styles.
+
+If you import styles by specifying the style option of `babel-plugin-import`, change it from 'css' to true, which will import the less version of antd.
+
+If you import styles from 'antd/dist/antd.css', change it to antd/dist/antd.less.
+
+3. Do not to reference `theme file` in the project, it will automatic inject to every less/sass file in your project
+
+4. load/switch built theme css file
+
+you can use [webpack-theme-set](https://www.npmjs.com/package/webpack-theme-set)
+
+```js
+import themeSetter from 'webpack-theme-set'
+// inital set Theme
+themeSetter.setTheme('light', {
+  prefix: 'main-'
+}).then(() => {
+   ReactDOM.render(.....)
+})
+// switch Theme
+themeSetter.setTheme('light')
+>>>>>>> doc: update readme
 ```
 
 ## Options
