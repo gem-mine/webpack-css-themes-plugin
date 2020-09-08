@@ -12,6 +12,7 @@ Compile once and output multiple theme style sheets
 - Theme files can refer to other files, including file in `node_modules`
 - Build on demand, theme file will be injected into the style files used by project
 - Support asynchronous chunks
+- Support HMR
 
 This project is inpired by [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
 
@@ -46,6 +47,9 @@ const ExcludeAssetsPlugin = require('@ianwalter/exclude-assets-plugin')
 // const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+// if you need to enable hmr for this plugin
+process.env.NODE_ENV = 'development'
 
 module.exports = {
   module: {

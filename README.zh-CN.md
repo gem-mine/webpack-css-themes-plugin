@@ -45,6 +45,9 @@ const ExcludeAssetsPlugin = require('@ianwalter/exclude-assets-plugin')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
+// 如果需要开启HMR
+process.env.NODE_ENV = 'development'
+
 module.exports = {
   module: {
     rules: [
