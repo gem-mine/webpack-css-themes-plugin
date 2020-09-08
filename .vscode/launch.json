@@ -20,7 +20,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}\\test\\manual\\devServer.js"
+      "program": "${workspaceFolder}\\test\\e2e\\hmr\\devServer.js"
     },
     {
       "type": "node",

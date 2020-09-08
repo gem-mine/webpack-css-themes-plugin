@@ -7954,6 +7954,11 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1, webpack-
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
+webpack-theme-set@^0.3.1:
+  version "0.3.1"
+  resolved "http://registry.npm.sdp.nd/webpack-theme-set/download/webpack-theme-set-0.3.1.tgz#6fd6d4963cf26361b8cd9b25c4e8e0a143f23a14"
+  integrity sha1-b9bUljzyY2G4zZslxOjgoUPyOhQ=
+
 webpack@^4.43.0:
   version "4.43.0"
   resolved "https://r.cnpmjs.org/webpack/download/webpack-4.43.0.tgz#c48547b11d563224c561dad1172c8aa0b8a678e6"
