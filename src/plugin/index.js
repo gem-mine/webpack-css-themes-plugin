@@ -81,7 +81,7 @@ class WebpackCSSThmemePlugin {
   normalizeOptions(options) {
     // convert pre-processor to array
     if (typeof options['pre-processor'] === 'string') {
-      options['pre-processor'] = [...options['pre-processor']]
+      options['pre-processor'] = [options['pre-processor']]
     }
 
     const { themes } = options

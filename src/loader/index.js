@@ -58,7 +58,9 @@ async function pitch(request) {
 function getLoadersForTheme(loaders, theme, options) {
   const themeLoaders = _.cloneDeep(loaders)
     .filter((loader) => !/node_modules[\\/]style-loader/.test(loader.path))
-  const themePath = theme.entryPath
+  const themePath = typeof theme.entryPath === 'string'
+    ? theme.entryPath
+    : theme.entryPath[options['pre-processor']]
   const preProcessorName = options['pre-processor']
 
   let loaderOptions
