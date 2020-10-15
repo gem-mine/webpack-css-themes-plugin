@@ -132,15 +132,17 @@ or your can load it yourself. just insert/remove `style` DOM to make it work.
 
 Type: `Array<theme>`
 
-- theme.name(Type `string?`): name of your theme
-- theme.entryPath(Type `string`): absolute path of your theme entry
+- theme.name(Type `string?`): name of your theme, required when using `less`/`sass` mix compile.
+- theme.entryPath(Type `string`): absolute path of your theme entry, pass in object with `less: {lessThemePath}` and `sass: {sassThemePath}` when using `less`/`sass` mix compile.
 - theme.distFilename(Type `string?`): output file name for your theme, default: `[name].css`.
 
 ### pre-processor
 
-Type: `string`
+Type: `string` | `Array`
 
 `less` or `sass`, default `less`.
+
+pass in `['less', 'sass']` when using `less`/`sass` mix compile.
 
 ### publicPath
 

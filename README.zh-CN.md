@@ -131,15 +131,17 @@ themeSetter.setTheme('light')
 
 Type: `Array<theme>`
 
-- theme.name(Type `string?`): 主题名称
-- theme.entryPath(Type `string`): 主题文件绝对路径
+- theme.name(Type `string?`): 主题名称, 当使用`sass`,`less`混合编译时，必填
+- theme.entryPath(Type `string` | `object`): 主题文件绝对路径, 当使用`sass`,`less`混合编译时, 需要传入包含`less: {lessThemePath}`和`sass: {sassThemePath}`的对象
 - theme.distFilename(Type `string?`): 主题输出文件名，默认: `[name].css`.
 
 ### pre-processor
 
-Type: `string`
+Type: `string` | `Array`
 
 `less` or `sass`, 默认`less`.
+
+如果需要`sass`,`less`，请传入`['less', 'sass']`
 
 ### publicPath
 
