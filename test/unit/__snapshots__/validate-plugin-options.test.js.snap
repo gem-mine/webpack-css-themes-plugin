@@ -5,10 +5,19 @@ exports[`validate options should throw an error on the "empty theme" option with
  - configuration.themes should be an non-empty array."
 `;
 
+exports[`validate options should throw an error on the "error pre-processor array name name" option with "{"themes":[{"entryPath":{"less":"testPath","sass":"testPath"}}],"pre-processor":["less","sass"]}" value 1`] = `"WebpackCSSThmemePlugin Options Error: should provide theme.name for mix pre-processor"`;
+
+exports[`validate options should throw an error on the "error pre-processor array string path" option with "{"themes":[{"name":"xxx","entryPath":"testPath"}],"pre-processor":["less","sass"]}" value 1`] = `"WebpackCSSThmemePlugin Options Error: should provide sass/less entryPath both for mix pre-processor"`;
+
 exports[`validate options should throw an error on the "error pre-processor" option with "{"themes":[{"name":"xxx","entryPath":"testPath"}],"pre-processor":"lessx"}" value 1`] = `
 "Invalid configuration object. Object has been initialized using a configuration object that does not match the API schema.
  - configuration['pre-processor'] should be one of these:
-   \\"less\\" | \\"sass\\""
+   \\"less\\" | \\"sass\\" | [\\"less\\" | \\"sass\\", ...] (should not have fewer than 1 item)
+   Details:
+    * configuration['pre-processor'] should be one of these:
+      \\"less\\" | \\"sass\\"
+    * configuration['pre-processor'] should be an array:
+      [\\"less\\" | \\"sass\\", ...] (should not have fewer than 1 item)"
 `;
 
 exports[`validate options should throw an error on the "no theme" option with "{}" value 1`] = `

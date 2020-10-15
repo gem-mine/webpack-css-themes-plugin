@@ -49,6 +49,44 @@ describe('validate options', () => {
       }],
       'pre-processor': 'lessx'
     }
+  },
+  {
+    key: 'error pre-processor array string path',
+    type: 'failure',
+    value: {
+      themes: [{
+        name: 'xxx',
+        entryPath: 'testPath'
+      }],
+      'pre-processor': ['less', 'sass']
+    }
+  },
+  {
+    key: 'error pre-processor array name name',
+    type: 'failure',
+    value: {
+      themes: [{
+        entryPath: {
+          less: 'testPath',
+          sass: 'testPath',
+        }
+      }],
+      'pre-processor': ['less', 'sass']
+    }
+  },
+  {
+    key: 'mix pre-processor sucess',
+    type: 'success',
+    value: {
+      themes: [{
+        name: 'xxx',
+        entryPath: {
+          less: 'testPath',
+          sass: 'testPath',
+        }
+      }],
+      'pre-processor': ['less', 'sass']
+    }
   }]
 
   function createTestCase(key, value, type) {
