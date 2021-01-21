@@ -51,7 +51,7 @@ function multiThemeHandler(compilation, options) {
   })
 
   compilation.mainTemplate.hooks.renderManifest.tap(PluginName, (result, { chunk }) => {
-    const entryName = chunk.name
+    const entryName = recursiveChunkEntryName(chunk)
     const cssModulesForChunk = cssModulesFromChunk[entryName]
     options.themes.forEach((theme) => {
       const themeName = theme.name
