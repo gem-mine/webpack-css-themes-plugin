@@ -68,7 +68,7 @@ function multiThemeHandler(compiler, compilation, cssThemePlugin) {
     }
 
     // We don't render none entry chunk
-    if (!chunk.canBeInitial()) {
+    if (!compilation.chunkGraph.getNumberOfEntryModules(chunk)) {
       return
     }
 
