@@ -59,12 +59,16 @@ function multiThemeHandler(compiler, compilation, cssThemePlugin) {
   })
 
   compilation.hooks.renderManifest.tap(PluginName, (result, { chunk }) => {
-    const { chunkGraph } = compilation
     const { HotUpdateChunk } = webpack
 
     // We don't need hot update chunks for css
     // We will use the real asset instead to update
     if (chunk instanceof HotUpdateChunk) {
+      return
+    }
+
+    // We don't render none entry chunk
+    if (!chunk.canBeInitial()) {
       return
     }
 
@@ -86,8 +90,7 @@ function multiThemeHandler(compiler, compilation, cssThemePlugin) {
             {
               contentHashType: MODULE_TYPE,
               chunk,
-            },
-            cssThemePlugin
+            }
           ),
           filenameTemplate: () => options.moduleFilename(themeName),
           pathOptions: {
@@ -105,10 +108,7 @@ function multiThemeHandler(compiler, compilation, cssThemePlugin) {
     const { outputOptions, chunkGraph } = compilation
     const modules = sortModules(
       compilation,
-      chunk,
-      chunkGraph.getChunkModulesIterableBySourceType(chunk, MODULE_TYPE),
-      compilation.runtimeTemplate.requestShortener,
-      cssThemePlugin
+      chunkGraph.getChunkModulesIterableBySourceType(chunk, MODULE_TYPE)
     )
 
     if (modules) {
@@ -128,7 +128,7 @@ function multiThemeHandler(compiler, compilation, cssThemePlugin) {
   })
 
   const { RuntimeGlobals } = webpack
-  const handler = getCssLoadingRuntimeModule(webpack, compilation)
+  const handler = getCssLoadingRuntimeModule(webpack, compilation, options)
 
   compilation.hooks.runtimeRequirementInTree
     .for(RuntimeGlobals.ensureChunkHandlers)
@@ -146,15 +146,8 @@ function renderContentAsset(
   requestShortener,
   filenameTemplate,
   pathData,
-  cssThemePlugin
 ) {
-  const usedModules = sortModules(
-    compilation,
-    chunk,
-    modules,
-    requestShortener,
-    cssThemePlugin
-  )
+  const usedModules = sortModules(compilation, modules)
 
   const { ConcatSource, SourceMapSource, RawSource } = compiler.webpack.sources
   const source = new ConcatSource()
@@ -223,114 +216,15 @@ function renderContentAsset(
   return new ConcatSource(externalsSource, source)
 }
 
-function sortModules(compilation, chunk, modules, requestShortener, cssThemePlugin) {
-  let usedModules = cssThemePlugin._sortedModulesCache.get(chunk)
-
-  // if (usedModules || !modules) {
-  //   return usedModules
-  // }
-
-  if (!modules) {
-    return usedModules
-  } else if (usedModules) {
-    return new Set(
-      [...usedModules].filter((m) => modules.includes(m))
+function sortModules(compilation, modules) {
+  if (modules) {
+    const { moduleGraph } = compilation
+    const usedModules = modules.sort(
+      (a, b) => moduleGraph.getPostOrderIndex(a) - moduleGraph.getPostOrderIndex(b)
     )
+
+    return usedModules
   }
-
-  const modulesList = [...modules]
-  // Store dependencies for modules
-  const moduleDependencies = new Map(modulesList.map((m) => [m, new Set()]))
-  const moduleDependenciesReasons = new Map(
-    modulesList.map((m) => [m, new Map()])
-  )
-  // Get ordered list of modules per chunk group
-  // This loop also gathers dependencies from the ordered lists
-  // Lists are in reverse order to allow to use Array.pop()
-  const modulesByChunkGroup = Array.from(
-    chunk.groupsIterable,
-    (chunkGroup) => {
-      const sortedModules = modulesList
-        .map((module) => ({
-          module,
-          index: chunkGroup.getModulePostOrderIndex(module),
-        }))
-        // eslint-disable-next-line no-undefined
-        .filter((item) => item.index !== undefined)
-        .sort((a, b) => b.index - a.index)
-        .map((item) => item.module)
-
-      for (let i = 0; i < sortedModules.length; i++) {
-        const set = moduleDependencies.get(sortedModules[i])
-        const reasons = moduleDependenciesReasons.get(sortedModules[i])
-
-        for (let j = i + 1; j < sortedModules.length; j++) {
-          const module = sortedModules[j]
-
-          set.add(module)
-
-          const reason = reasons.get(module) || new Set()
-
-          reason.add(chunkGroup)
-          reasons.set(module, reason)
-        }
-      }
-
-      return sortedModules
-    }
-  )
-
-  // set with already included modules in correct order
-  usedModules = new Set()
-
-  const unusedModulesFilter = (m) => !usedModules.has(m)
-
-  while (usedModules.size < modulesList.length) {
-    let success = false
-    let bestMatch
-    let bestMatchDeps
-
-    // get first module where dependencies are fulfilled
-    for (const list of modulesByChunkGroup) {
-      // skip and remove already added modules
-      while (list.length > 0 && usedModules.has(list[list.length - 1])) {
-        list.pop()
-      }
-
-      // skip empty lists
-      if (list.length !== 0) {
-        const module = list[list.length - 1]
-        const deps = moduleDependencies.get(module)
-        // determine dependencies that are not yet included
-        const failedDeps = Array.from(deps).filter(unusedModulesFilter)
-
-        // store best match for fallback behavior
-        if (!bestMatchDeps || bestMatchDeps.length > failedDeps.length) {
-          bestMatch = list
-          bestMatchDeps = failedDeps
-        }
-
-        if (failedDeps.length === 0) {
-          // use this module and remove it from list
-          usedModules.add(list.pop())
-          success = true
-          break
-        }
-      }
-    }
-
-    if (!success) {
-      // no module found => there is a conflict
-      // use list with fewest failed deps
-      // and emit a warning
-      const fallbackModule = bestMatch.pop()
-      usedModules.add(fallbackModule)
-    }
-  }
-
-  cssThemePlugin._sortedModulesCache.set(chunk, usedModules)
-
-  return usedModules
 }
 
 module.exports = multiThemeHandler

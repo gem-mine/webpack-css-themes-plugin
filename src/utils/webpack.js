@@ -96,7 +96,7 @@ function hotLoader(content, context) {
       // ${Date.now()}
       var cssReload = require(${stringifyRequest(
         context.context,
-        path.join(__dirname, 'hmr/hotModuleReplacement.js')
+        path.join(__dirname, '../hmr/hotModuleReplacement.js')
       )})(module.id, ${JSON.stringify({
     ...context.options,
     locals: !!context.locals,

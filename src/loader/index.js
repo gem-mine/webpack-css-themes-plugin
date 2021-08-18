@@ -64,7 +64,6 @@ function getLoadersForTheme(loaders, theme, options) {
     ? theme.entryPath
     : theme.entryPath[options['pre-processor']]
   const preProcessorName = options['pre-processor']
-  const additionalData = getAdditionalDataFn(themePath)
   let loaderOptions
   switch (preProcessorName) {
     case 'less':
@@ -74,7 +73,7 @@ function getLoadersForTheme(loaders, theme, options) {
             path.dirname(themePath)
           ]
         },
-        additionalData
+        additionalData: getAdditionalDataFn(themePath)
       }
       break
     case 'sass':
@@ -84,7 +83,7 @@ function getLoadersForTheme(loaders, theme, options) {
             path.dirname(themePath)
           ]
         },
-        additionalData
+        additionalData: getAdditionalDataFn(themePath, true)
       }
       break
     // no default
@@ -101,13 +100,15 @@ function getLoadersForTheme(loaders, theme, options) {
   }
 }
 
-function getAdditionalDataFn(themePath) {
+function getAdditionalDataFn(themePath, prefix = false) {
   return function additionalData(content, loaderApi) {
     loaderApi.addDependency(themePath)
     const themeFileContent = fs.readFileSync(themePath, {
       encoding: 'utf-8'
     })
-    return `${themeFileContent}${content}`
+    return prefix
+      ? `${themeFileContent}${content}`
+      : `${content}${themeFileContent}`
   }
 }
 

@@ -1,7 +1,13 @@
 const { compareModulesByIdentifier } = require('webpack/lib/util/comparators')
 const { MODULE_TYPE } = require('../const')
 
-module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
+const runtimeOptions = {
+  insert: true,
+  linkType: 'text/css',
+  attributes: undefined,
+}
+
+module.exports = function getCssLoadingRuntimeModule(webpack, compilation, options) {
   const { Template } = webpack
   const { RuntimeGlobals, runtime } = webpack
 
@@ -29,11 +35,10 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
   const { RuntimeModule } = webpack
 
   class CssLoadingRuntimeModule extends RuntimeModule {
-    constructor(runtimeRequirements, runtimeOptions) {
+    constructor(runtimeRequirements) {
       super('css loading', 10)
 
       this.runtimeRequirements = runtimeRequirements
-      this.runtimeOptions = runtimeOptions
     }
 
     generate() {
@@ -59,9 +64,9 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
           'chunkId, fullhref, resolve, reject',
           [
             'var linkTag = document.createElement("link");',
-            this.runtimeOptions.attributes
+            runtimeOptions.attributes
               ? Template.asString(
-                Object.entries(this.runtimeOptions.attributes).map(
+                Object.entries(runtimeOptions.attributes).map(
                   (entry) => {
                     const [key, value] = entry
 
@@ -73,9 +78,9 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
               )
               : '',
             'linkTag.rel = "stylesheet";',
-            this.runtimeOptions.linkType
+            runtimeOptions.linkType
               ? `linkTag.type = ${JSON.stringify(
-                this.runtimeOptions.linkType
+                runtimeOptions.linkType
               )};`
               : '',
             `var onLinkComplete = ${runtimeTemplate.basicFunction('event', [
@@ -110,11 +115,11 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
               ])
               : '',
             // eslint-disable-next-line no-nested-ternary
-            typeof this.runtimeOptions.insert !== 'undefined'
-              ? typeof this.runtimeOptions.insert === 'function'
-                ? `(${this.runtimeOptions.insert.toString()})(linkTag)`
+            typeof runtimeOptions.insert !== 'undefined'
+              ? typeof runtimeOptions.insert === 'function'
+                ? `(${runtimeOptions.insert.toString()})(linkTag)`
                 : Template.asString([
-                  `var target = document.querySelector("${this.runtimeOptions.insert}");`,
+                  `var target = document.querySelector("${runtimeOptions.insert}");`,
                   'target.parentNode.insertBefore(linkTag, target.nextSibling);',
                 ])
               : Template.asString(['document.head.appendChild(linkTag);']),
@@ -257,8 +262,8 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
     enabledChunks.add(chunk)
 
     if (
-      typeof this.options.chunkFilename === 'string'
-      && /\[(full)?hash(:\d+)?\]/.test(this.options.chunkFilename)
+      typeof options.chunkFilename === 'string'
+      && /\[(full)?hash(:\d+)?\]/.test(options.chunkFilename)
     ) {
       set.add(RuntimeGlobals.getFullHash)
     }
@@ -276,9 +281,7 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
             return false
           }
 
-          return referencedChunk.canBeInitial()
-            ? this.options.filename
-            : this.options.chunkFilename
+          return options.filename
         },
         true
       )
@@ -286,7 +289,7 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation) {
 
     compilation.addRuntimeModule(
       chunk,
-      new CssLoadingRuntimeModule(set, this.runtimeOptions)
+      new CssLoadingRuntimeModule(set)
     )
   }
 

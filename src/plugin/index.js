@@ -36,7 +36,6 @@ class WebpackCSSThmemePlugin {
       ...options
     }
     this.normalizeOptions(this.options)
-    this._sortedModulesCache = new WeakMap()
   }
 
   apply(compiler) {

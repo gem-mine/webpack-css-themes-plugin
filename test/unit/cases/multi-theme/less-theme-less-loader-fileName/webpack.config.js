@@ -28,7 +28,7 @@ module.exports = {
         {
           name: 'theme2',
           entryPath: path.resolve(__dirname, 'theme/index2.less'),
-          distFilename: '[name]-[hash]-test.css'
+          distFilename: '[name]-[contenthash]-test.css'
         }
       ]
     }),

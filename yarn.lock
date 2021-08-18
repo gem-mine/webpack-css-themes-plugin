@@ -7639,6 +7639,11 @@ webpack-sources@^3.2.0:
   resolved "https://registry.nlark.com/webpack-sources/download/webpack-sources-3.2.0.tgz#b16973bcf844ebcdb3afde32eda1c04d0b90f89d"
   integrity sha1-sWlzvPhE682zr94y7aHATQuQ+J0=
 
+webpack-theme-set@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.nlark.com/webpack-theme-set/download/webpack-theme-set-0.6.0.tgz#5bb026302a396062c1aefc792d424fb17ce4562b"
+  integrity sha1-W7AmMCo5YGLBrvx5LUJPsXzkVis=
+
 webpack@^5.45.1:
   version "5.50.0"
   resolved "https://registry.nlark.com/webpack/download/webpack-5.50.0.tgz?cache=0&sync_timestamp=1628620367968&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fwebpack%2Fdownload%2Fwebpack-5.50.0.tgz#5562d75902a749eb4d75131f5627eac3a3192527"
