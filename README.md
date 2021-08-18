@@ -28,7 +28,15 @@ Compare with [Ant-Design's offical theme solution](https://ant.design/docs/react
 
 ## Requirement
 
-- Webpack: \^4.4.0 | \^5.0.0
+- Webpack: \^5.45.1
+- less-loader: "\^8.0.0"
+- sass-loader: "\^12.0.0"
+
+### Older version
+
+If you're using `webpack@4`, try `webpack-css-themes-plugin@1.0.0`
+
+- Webpack: \^4.4.0
 - less-loader: "\^6.0.0"
 - sass-loader: "\^8.0.0"
 

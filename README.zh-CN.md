@@ -25,7 +25,15 @@
 
 ## 要求
 
-- Webpack: \^4.4.0 | \^5.0.0
+- Webpack: \^5.45.1
+- less-loader: \^8.0.0
+- sass-loader: \^12.0.0
+
+### 老版本兼容
+
+对于`webpack@4`, 请使用`webpack-css-themes-plugin@1.0.0`，目前发布在`tag = webpack4`上
+
+- Webpack: \^4.4.0
 - less-loader: "\^6.0.0"
 - sass-loader: "\^8.0.0"
 
