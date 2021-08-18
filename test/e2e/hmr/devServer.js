@@ -8,8 +8,6 @@ process.env.NODE_ENV = 'development'
 
 const compiler = webpack(webpackConfig)
 const server = new WebpackDevServer(compiler, {
-  logLevel: 'debug',
-  clientLogLevel: 'debug',
   open: false,
   hot: true
 })
