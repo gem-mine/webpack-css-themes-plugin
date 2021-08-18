@@ -1,17 +1,16 @@
 const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
-const loaderUtils = require('loader-utils')
 const validateOptions = require('schema-utils')
 
 const ChildCompiler = require('./ChildCompiler')
 const schema = require('../loader-options.json')
-const { PluginName } = require('../const')
+const { PluginName, AUTO_PUBLIC_PATH } = require('../const')
 
 const mergeWithArray = require('../utils/mergeWithArray')
 
 async function pitch(request) {
-  const options = loaderUtils.getOptions(this) || {}
+  const options = this.getOptions(schema)
   validateOptions(schema, options, PluginName)
 
   const callback = this.async()
@@ -20,13 +19,16 @@ async function pitch(request) {
   this.addDependency(this.resourcePath)
 
   // eslint-disable-next-line no-nested-ternary
-  const publicPath = typeof options.publicPath === 'string'
+  let publicPath = typeof options.publicPath === 'string'
     ? options.publicPath === '' || options.publicPath.endsWith('/')
       ? options.publicPath
       : `${options.publicPath}/`
     : typeof options.publicPath === 'function'
       ? options.publicPath(this.resourcePath, this.rootContext)
       : this._compilation.outputOptions.publicPath
+  if (publicPath === 'auto') {
+    publicPath = AUTO_PUBLIC_PATH
+  }
 
   const parentLoaders = this.loaders.slice(this.loaderIndex + 1)
   const outputOptions = {
@@ -62,7 +64,7 @@ function getLoadersForTheme(loaders, theme, options) {
     ? theme.entryPath
     : theme.entryPath[options['pre-processor']]
   const preProcessorName = options['pre-processor']
-
+  const additionalData = getAdditionalDataFn(themePath)
   let loaderOptions
   switch (preProcessorName) {
     case 'less':
@@ -72,10 +74,7 @@ function getLoadersForTheme(loaders, theme, options) {
             path.dirname(themePath)
           ]
         },
-        appendData(loaderApi) {
-          loaderApi.addDependency(themePath)
-          return fs.readFileSync(themePath)
-        }
+        additionalData
       }
       break
     case 'sass':
@@ -85,10 +84,7 @@ function getLoadersForTheme(loaders, theme, options) {
             path.dirname(themePath)
           ]
         },
-        prependData(loaderApi) {
-          loaderApi.addDependency(themePath)
-          return fs.readFileSync(themePath)
-        }
+        additionalData
       }
       break
     // no default
@@ -102,6 +98,16 @@ function getLoadersForTheme(loaders, theme, options) {
   } else {
     // must be pure css-loader
     return themeLoaders
+  }
+}
+
+function getAdditionalDataFn(themePath) {
+  return function additionalData(content, loaderApi) {
+    loaderApi.addDependency(themePath)
+    const themeFileContent = fs.readFileSync(themePath, {
+      encoding: 'utf-8'
+    })
+    return `${themeFileContent}${content}`
   }
 }
 

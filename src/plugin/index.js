@@ -1,15 +1,33 @@
 const path = require('path')
-
 const validateOptions = require('schema-utils')
 const _ = require('lodash')
 
-const { PluginName } = require('../const')
+const getCssModule = require('../CssDependency/getCssModule')
+const getCssDependency = require('../CssDependency/getCssDependency')
+
+const {
+  trueFn
+} = require('../utils/webpack')
+const {
+  PluginName,
+  registered,
+  MODULE_TYPE,
+} = require('../const')
+
 const schema = require('../plugin-options.json')
 const multiThemeHandler = require('./multiThemeHandler')
 
 const DefaultFileName = '[name].css'
 
 class WebpackCSSThmemePlugin {
+  static getCssModule(webpack) {
+    return getCssModule(webpack)
+  }
+
+  static getCssDependency(webpack) {
+    return getCssDependency(webpack)
+  }
+
   constructor(options) {
     validateOptions(schema, options, PluginName)
     this.validateOptions(options)
@@ -18,9 +36,30 @@ class WebpackCSSThmemePlugin {
       ...options
     }
     this.normalizeOptions(this.options)
+    this._sortedModulesCache = new WeakMap()
   }
 
   apply(compiler) {
+    const { webpack } = compiler
+    // TODO bug in webpack, remove it after it will be fixed
+    // webpack tries to `require` loader firstly when serializer doesn't found
+    if (!registered.has(webpack)) {
+      registered.add(webpack)
+
+      webpack.util.serialization.registerLoader(
+        /^mini-css-extract-plugin\//,
+        trueFn
+      )
+    }
+
+    const { splitChunks } = compiler.options.optimization
+
+    if (splitChunks) {
+      if (splitChunks.defaultSizeTypes.includes('...')) {
+        splitChunks.defaultSizeTypes.push(MODULE_TYPE)
+      }
+    }
+
     const options = _.cloneDeep(this.options)
     const preProcessorNames = options['pre-processor']
 
@@ -50,10 +89,8 @@ class WebpackCSSThmemePlugin {
       })
     })
 
-    compiler.hooks.thisCompilation.tap(`${PluginName}_thisCompilation`, (compilation) => {
-      multiThemeHandler(compilation, options)
-    }, {
-      handlerName: `${PluginName}-thisCompilation`,
+    compiler.hooks.thisCompilation.tap(PluginName, (compilation) => {
+      multiThemeHandler(compiler, compilation, this)
     })
   }
 
