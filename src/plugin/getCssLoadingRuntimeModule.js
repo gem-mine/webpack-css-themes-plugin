@@ -130,7 +130,7 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation, optio
         `var findStylesheet = ${runtimeTemplate.basicFunction(
           'href, fullhref',
           [
-            'if(!href) return true'
+            'if(!href) return true;',
             'var existingLinkTags = document.getElementsByTagName("link");',
             'for(var i = 0; i < existingLinkTags.length; i++) {',
             Template.indent([
