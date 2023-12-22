@@ -2,7 +2,7 @@ const { compareModulesByIdentifier } = require('webpack/lib/util/comparators')
 const { MODULE_TYPE } = require('../const')
 
 const runtimeOptions = {
-  insert: true,
+  insert: undefined,
   linkType: 'text/css',
   attributes: undefined,
 }
@@ -10,6 +10,7 @@ const runtimeOptions = {
 module.exports = function getCssLoadingRuntimeModule(webpack, compilation, options) {
   const { Template } = webpack
   const { RuntimeGlobals, runtime } = webpack
+  runtimeOptions.insert = options.insert
 
   // eslint-disable-next-line no-shadow
   const getCssChunkObject = (mainChunk, compilation) => {
@@ -129,6 +130,7 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation, optio
         `var findStylesheet = ${runtimeTemplate.basicFunction(
           'href, fullhref',
           [
+            'if(!href) return true'
             'var existingLinkTags = document.getElementsByTagName("link");',
             'for(var i = 0; i < existingLinkTags.length; i++) {',
             Template.indent([
