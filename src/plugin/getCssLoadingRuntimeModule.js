@@ -116,7 +116,7 @@ module.exports = function getCssLoadingRuntimeModule(webpack, compilation, optio
               ])
               : '',
             // eslint-disable-next-line no-nested-ternary
-            typeof runtimeOptions.insert !== 'undefined'
+            typeof runtimeOptions.insert !== undefined
               ? typeof runtimeOptions.insert === 'function'
                 ? `(${runtimeOptions.insert.toString()})(linkTag)`
                 : Template.asString([
